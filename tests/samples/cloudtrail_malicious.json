@@ -1,0 +1,612 @@
+{
+  "Records": [
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "Root",
+        "principalId": "123456789012",
+        "arn": "arn:aws:iam::123456789012:root",
+        "accountId": "123456789012",
+        "accessKeyId": "AKIAIOSFODNN7EXAMPLE"
+      },
+      "eventTime": "2026-03-12T08:15:00Z",
+      "eventSource": "signin.amazonaws.com",
+      "eventName": "ConsoleLogin",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "203.0.113.50",
+      "userAgent": "Mozilla/5.0",
+      "requestParameters": null,
+      "responseElements": {"ConsoleLogin": "Success"},
+      "additionalEventData": {"MFAUsed": "No", "LoginTo": "https://console.aws.amazon.com/console/home"}
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+        "arn": "arn:aws:iam::123456789012:user/jsmith",
+        "accountId": "123456789012",
+        "userName": "jsmith"
+      },
+      "eventTime": "2026-03-12T08:20:00Z",
+      "eventSource": "signin.amazonaws.com",
+      "eventName": "ConsoleLogin",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "198.51.100.22",
+      "responseElements": {"ConsoleLogin": "Success"},
+      "additionalEventData": {"MFAUsed": "No"}
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+        "arn": "arn:aws:iam::123456789012:user/attacker",
+        "accountId": "123456789012",
+        "userName": "attacker"
+      },
+      "eventTime": "2026-03-12T08:22:00Z",
+      "eventSource": "signin.amazonaws.com",
+      "eventName": "ConsoleLogin",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "192.0.2.99",
+      "responseElements": {"ConsoleLogin": "Failure"},
+      "additionalEventData": {"MFAUsed": "No"}
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+        "arn": "arn:aws:iam::123456789012:user/attacker",
+        "accountId": "123456789012",
+        "userName": "attacker"
+      },
+      "eventTime": "2026-03-12T08:30:00Z",
+      "eventSource": "iam.amazonaws.com",
+      "eventName": "CreateUser",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "203.0.113.50",
+      "requestParameters": {"userName": "backdoor-user"},
+      "responseElements": {"user": {"userName": "backdoor-user", "userId": "AIDA000000000EXAMPLE"}}
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+        "arn": "arn:aws:iam::123456789012:user/attacker",
+        "accountId": "123456789012",
+        "userName": "attacker"
+      },
+      "eventTime": "2026-03-12T08:31:00Z",
+      "eventSource": "iam.amazonaws.com",
+      "eventName": "CreateAccessKey",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "203.0.113.50",
+      "requestParameters": {"userName": "backdoor-user"},
+      "responseElements": {"accessKey": {"accessKeyId": "AKIAI44QH8DHBEXAMPLE", "status": "Active"}}
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+        "arn": "arn:aws:iam::123456789012:user/attacker",
+        "accountId": "123456789012",
+        "userName": "attacker"
+      },
+      "eventTime": "2026-03-12T08:32:00Z",
+      "eventSource": "iam.amazonaws.com",
+      "eventName": "CreateLoginProfile",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "203.0.113.50",
+      "requestParameters": {"userName": "backdoor-user", "passwordResetRequired": false}
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+        "arn": "arn:aws:iam::123456789012:user/attacker",
+        "accountId": "123456789012",
+        "userName": "attacker"
+      },
+      "eventTime": "2026-03-12T08:33:00Z",
+      "eventSource": "iam.amazonaws.com",
+      "eventName": "AttachUserPolicy",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "203.0.113.50",
+      "requestParameters": {
+        "userName": "backdoor-user",
+        "policyArn": "arn:aws:iam::aws:policy/AdministratorAccess"
+      }
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+        "arn": "arn:aws:iam::123456789012:user/attacker",
+        "accountId": "123456789012",
+        "userName": "attacker"
+      },
+      "eventTime": "2026-03-12T08:34:00Z",
+      "eventSource": "iam.amazonaws.com",
+      "eventName": "PutUserPolicy",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "203.0.113.50",
+      "requestParameters": {
+        "userName": "backdoor-user",
+        "policyName": "full-access",
+        "policyDocument": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"*\",\"Resource\":\"*\"}]}"
+      }
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+        "arn": "arn:aws:iam::123456789012:user/attacker",
+        "accountId": "123456789012",
+        "userName": "attacker"
+      },
+      "eventTime": "2026-03-12T08:35:00Z",
+      "eventSource": "iam.amazonaws.com",
+      "eventName": "CreatePolicy",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "203.0.113.50",
+      "requestParameters": {
+        "policyName": "wildcard-policy",
+        "policyDocument": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"*\",\"Resource\":\"*\"}]}"
+      }
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+        "arn": "arn:aws:iam::123456789012:user/attacker",
+        "accountId": "123456789012",
+        "userName": "attacker"
+      },
+      "eventTime": "2026-03-12T08:36:00Z",
+      "eventSource": "sts.amazonaws.com",
+      "eventName": "AssumeRole",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "203.0.113.50",
+      "requestParameters": {
+        "roleArn": "arn:aws:iam::999888777666:role/external-admin",
+        "roleSessionName": "cross-account-session"
+      }
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+        "arn": "arn:aws:iam::123456789012:user/attacker",
+        "accountId": "123456789012",
+        "userName": "attacker"
+      },
+      "eventTime": "2026-03-12T08:40:00Z",
+      "eventSource": "cloudtrail.amazonaws.com",
+      "eventName": "StopLogging",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "203.0.113.50",
+      "requestParameters": {"name": "arn:aws:cloudtrail:us-east-1:123456789012:trail/management-trail"}
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+        "arn": "arn:aws:iam::123456789012:user/attacker",
+        "accountId": "123456789012",
+        "userName": "attacker"
+      },
+      "eventTime": "2026-03-12T08:41:00Z",
+      "eventSource": "cloudtrail.amazonaws.com",
+      "eventName": "DeleteTrail",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "203.0.113.50",
+      "requestParameters": {"name": "arn:aws:cloudtrail:us-east-1:123456789012:trail/management-trail"}
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+        "arn": "arn:aws:iam::123456789012:user/attacker",
+        "accountId": "123456789012",
+        "userName": "attacker"
+      },
+      "eventTime": "2026-03-12T08:42:00Z",
+      "eventSource": "cloudtrail.amazonaws.com",
+      "eventName": "PutEventSelectors",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "203.0.113.50",
+      "requestParameters": {"trailName": "remaining-trail", "eventSelectors": []}
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+        "arn": "arn:aws:iam::123456789012:user/attacker",
+        "accountId": "123456789012",
+        "userName": "attacker"
+      },
+      "eventTime": "2026-03-12T08:43:00Z",
+      "eventSource": "guardduty.amazonaws.com",
+      "eventName": "DeleteDetector",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "203.0.113.50",
+      "requestParameters": {"detectorId": "abc123def456"}
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+        "arn": "arn:aws:iam::123456789012:user/attacker",
+        "accountId": "123456789012",
+        "userName": "attacker"
+      },
+      "eventTime": "2026-03-12T08:44:00Z",
+      "eventSource": "s3.amazonaws.com",
+      "eventName": "PutBucketLogging",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "203.0.113.50",
+      "requestParameters": {"bucketName": "sensitive-data-bucket", "BucketLoggingStatus": {}}
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+        "arn": "arn:aws:iam::123456789012:user/attacker",
+        "accountId": "123456789012",
+        "userName": "attacker"
+      },
+      "eventTime": "2026-03-12T08:45:00Z",
+      "eventSource": "config.amazonaws.com",
+      "eventName": "StopConfigurationRecorder",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "203.0.113.50",
+      "requestParameters": {"configurationRecorderName": "default"}
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+        "arn": "arn:aws:iam::123456789012:user/attacker",
+        "accountId": "123456789012",
+        "userName": "attacker"
+      },
+      "eventTime": "2026-03-12T08:46:00Z",
+      "eventSource": "ec2.amazonaws.com",
+      "eventName": "DeleteFlowLogs",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "203.0.113.50",
+      "requestParameters": {"DeleteFlowLogIds": ["fl-0123456789abcdef0"]}
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+        "arn": "arn:aws:iam::123456789012:user/attacker",
+        "accountId": "123456789012",
+        "userName": "attacker"
+      },
+      "eventTime": "2026-03-12T08:48:00Z",
+      "eventSource": "secretsmanager.amazonaws.com",
+      "eventName": "GetSecretValue",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "203.0.113.50",
+      "requestParameters": {"secretId": "prod/database/admin-password"}
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+        "arn": "arn:aws:iam::123456789012:user/attacker",
+        "accountId": "123456789012",
+        "userName": "attacker"
+      },
+      "eventTime": "2026-03-12T08:49:00Z",
+      "eventSource": "ssm.amazonaws.com",
+      "eventName": "GetParameter",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "203.0.113.50",
+      "requestParameters": {"name": "/prod/api-secret-key", "withDecryption": true}
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+        "arn": "arn:aws:iam::123456789012:user/attacker",
+        "accountId": "123456789012",
+        "userName": "attacker"
+      },
+      "eventTime": "2026-03-12T08:50:00Z",
+      "eventSource": "iam.amazonaws.com",
+      "eventName": "UpdateAccountPasswordPolicy",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "203.0.113.50",
+      "requestParameters": {"minimumPasswordLength": 6, "requireNumbers": false}
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+        "arn": "arn:aws:iam::123456789012:user/attacker",
+        "accountId": "123456789012",
+        "userName": "attacker"
+      },
+      "eventTime": "2026-03-12T08:52:00Z",
+      "eventSource": "s3.amazonaws.com",
+      "eventName": "ListBuckets",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "203.0.113.50"
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+        "arn": "arn:aws:iam::123456789012:user/attacker",
+        "accountId": "123456789012",
+        "userName": "attacker"
+      },
+      "eventTime": "2026-03-12T08:53:00Z",
+      "eventSource": "ec2.amazonaws.com",
+      "eventName": "DescribeInstances",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "203.0.113.50"
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+        "arn": "arn:aws:iam::123456789012:user/attacker",
+        "accountId": "123456789012",
+        "userName": "attacker"
+      },
+      "eventTime": "2026-03-12T08:54:00Z",
+      "eventSource": "s3.amazonaws.com",
+      "eventName": "GetBucketAcl",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "203.0.113.50",
+      "requestParameters": {"bucketName": "sensitive-data-bucket"}
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+        "arn": "arn:aws:iam::123456789012:user/attacker",
+        "accountId": "123456789012",
+        "userName": "attacker"
+      },
+      "eventTime": "2026-03-12T09:00:00Z",
+      "eventSource": "s3.amazonaws.com",
+      "eventName": "PutBucketAcl",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "203.0.113.50",
+      "requestParameters": {
+        "bucketName": "sensitive-data-bucket",
+        "AccessControlPolicy": {"AccessControlList": {"Grant": [{"Grantee": {"URI": "http://acs.amazonaws.com/groups/global/AllUsers"}, "Permission": "public-read"}]}}
+      }
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+        "arn": "arn:aws:iam::123456789012:user/attacker",
+        "accountId": "123456789012",
+        "userName": "attacker"
+      },
+      "eventTime": "2026-03-12T09:01:00Z",
+      "eventSource": "ec2.amazonaws.com",
+      "eventName": "ModifySnapshotAttribute",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "203.0.113.50",
+      "requestParameters": {
+        "snapshotId": "snap-0123456789abcdef0",
+        "createVolumePermission": {"add": {"items": [{"group": "all"}]}}
+      }
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+        "arn": "arn:aws:iam::123456789012:user/attacker",
+        "accountId": "123456789012",
+        "userName": "attacker"
+      },
+      "eventTime": "2026-03-12T09:02:00Z",
+      "eventSource": "rds.amazonaws.com",
+      "eventName": "ModifyDBSnapshotAttribute",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "203.0.113.50",
+      "requestParameters": {"dBSnapshotIdentifier": "prod-db-snapshot", "attributeName": "restore", "valuesToAdd": ["999888777666"]}
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+        "arn": "arn:aws:iam::123456789012:user/attacker",
+        "accountId": "123456789012",
+        "userName": "attacker"
+      },
+      "eventTime": "2026-03-12T09:05:00Z",
+      "eventSource": "ec2.amazonaws.com",
+      "eventName": "AuthorizeSecurityGroupIngress",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "203.0.113.50",
+      "requestParameters": {
+        "groupId": "sg-0123456789abcdef0",
+        "ipPermissions": {"items": [{"ipProtocol": "tcp", "fromPort": 22, "toPort": 22, "ipRanges": {"items": [{"cidrIp": "0.0.0.0/0"}]}}]}
+      }
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+        "arn": "arn:aws:iam::123456789012:user/attacker",
+        "accountId": "123456789012",
+        "userName": "attacker"
+      },
+      "eventTime": "2026-03-12T09:06:00Z",
+      "eventSource": "ec2.amazonaws.com",
+      "eventName": "RevokeSecurityGroupIngress",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "203.0.113.50",
+      "requestParameters": {"groupId": "sg-0123456789abcdef0"}
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+        "arn": "arn:aws:iam::123456789012:user/attacker",
+        "accountId": "123456789012",
+        "userName": "attacker"
+      },
+      "eventTime": "2026-03-12T09:07:00Z",
+      "eventSource": "ec2.amazonaws.com",
+      "eventName": "CreateVpc",
+      "awsRegion": "af-south-1",
+      "sourceIPAddress": "203.0.113.50",
+      "requestParameters": {"cidrBlock": "10.99.0.0/16"}
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+        "arn": "arn:aws:iam::123456789012:user/attacker",
+        "accountId": "123456789012",
+        "userName": "attacker"
+      },
+      "eventTime": "2026-03-12T09:10:00Z",
+      "eventSource": "ec2.amazonaws.com",
+      "eventName": "TerminateInstances",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "203.0.113.50",
+      "requestParameters": {"instancesSet": {"items": [{"instanceId": "i-0123456789abcdef0"}, {"instanceId": "i-0abcdef1234567890"}]}}
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+        "arn": "arn:aws:iam::123456789012:user/attacker",
+        "accountId": "123456789012",
+        "userName": "attacker"
+      },
+      "eventTime": "2026-03-12T09:12:00Z",
+      "eventSource": "rds.amazonaws.com",
+      "eventName": "DeleteDBInstance",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "203.0.113.50",
+      "requestParameters": {"dBInstanceIdentifier": "prod-database", "skipFinalSnapshot": true}
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+        "arn": "arn:aws:iam::123456789012:user/attacker",
+        "accountId": "123456789012",
+        "userName": "attacker"
+      },
+      "eventTime": "2026-03-12T09:13:00Z",
+      "eventSource": "s3.amazonaws.com",
+      "eventName": "DeleteBucket",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "203.0.113.50",
+      "requestParameters": {"bucketName": "critical-backup-bucket"}
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+        "arn": "arn:aws:iam::123456789012:user/attacker",
+        "accountId": "123456789012",
+        "userName": "attacker"
+      },
+      "eventTime": "2026-03-12T09:14:00Z",
+      "eventSource": "ec2.amazonaws.com",
+      "eventName": "RunInstances",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "203.0.113.50",
+      "requestParameters": {
+        "instanceType": "p4d.24xlarge",
+        "instancesSet": {"items": [{"imageId": "ami-0123456789abcdef0"}]},
+        "minCount": 5,
+        "maxCount": 5
+      }
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+        "arn": "arn:aws:iam::123456789012:user/attacker",
+        "accountId": "123456789012",
+        "userName": "attacker"
+      },
+      "eventTime": "2026-03-12T09:15:00Z",
+      "eventSource": "kms.amazonaws.com",
+      "eventName": "ScheduleKeyDeletion",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "203.0.113.50",
+      "requestParameters": {"keyId": "mrk-0123456789abcdef0", "pendingWindowInDays": 7}
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+        "arn": "arn:aws:iam::123456789012:user/attacker",
+        "accountId": "123456789012",
+        "userName": "attacker"
+      },
+      "eventTime": "2026-03-12T09:16:00Z",
+      "eventSource": "lambda.amazonaws.com",
+      "eventName": "CreateFunction20150331",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "203.0.113.50",
+      "requestParameters": {"functionName": "data-exfil-function", "runtime": "python3.12"}
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+        "arn": "arn:aws:iam::123456789012:user/attacker",
+        "accountId": "123456789012",
+        "userName": "attacker"
+      },
+      "eventTime": "2026-03-12T09:17:00Z",
+      "eventSource": "ec2.amazonaws.com",
+      "eventName": "CreateKeyPair",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "203.0.113.50",
+      "requestParameters": {"keyName": "backdoor-key"}
+    }
+  ]
+}

@@ -1,0 +1,202 @@
+{
+  "entries": [
+    {
+      "logName": "projects/my-project-123/logs/cloudaudit.googleapis.com%2Factivity",
+      "timestamp": "2026-03-12T11:00:00Z",
+      "receiveTimestamp": "2026-03-12T11:00:01Z",
+      "severity": "NOTICE",
+      "resource": {
+        "type": "service_account",
+        "labels": {"project_id": "my-project-123", "email_id": "backdoor-sa@my-project-123.iam.gserviceaccount.com", "location": "global"}
+      },
+      "protoPayload": {
+        "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+        "serviceName": "iam.googleapis.com",
+        "methodName": "google.iam.admin.v1.CreateServiceAccount",
+        "authenticationInfo": {"principalEmail": "attacker@evil.com"},
+        "requestMetadata": {"callerIp": "203.0.113.200", "callerSuppliedUserAgent": "google-cloud-sdk"},
+        "request": {"account_id": "backdoor-sa", "service_account": {"display_name": "Backdoor Service Account"}}
+      }
+    },
+    {
+      "logName": "projects/my-project-123/logs/cloudaudit.googleapis.com%2Factivity",
+      "timestamp": "2026-03-12T11:01:00Z",
+      "receiveTimestamp": "2026-03-12T11:01:01Z",
+      "severity": "NOTICE",
+      "resource": {
+        "type": "service_account",
+        "labels": {"project_id": "my-project-123", "email_id": "backdoor-sa@my-project-123.iam.gserviceaccount.com", "location": "global"}
+      },
+      "protoPayload": {
+        "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+        "serviceName": "iam.googleapis.com",
+        "methodName": "google.iam.admin.v1.CreateServiceAccountKey",
+        "authenticationInfo": {"principalEmail": "attacker@evil.com"},
+        "requestMetadata": {"callerIp": "203.0.113.200", "callerSuppliedUserAgent": "google-cloud-sdk"},
+        "request": {"name": "projects/my-project-123/serviceAccounts/backdoor-sa@my-project-123.iam.gserviceaccount.com"}
+      }
+    },
+    {
+      "logName": "projects/my-project-123/logs/cloudaudit.googleapis.com%2Factivity",
+      "timestamp": "2026-03-12T11:05:00Z",
+      "receiveTimestamp": "2026-03-12T11:05:01Z",
+      "severity": "NOTICE",
+      "resource": {
+        "type": "project",
+        "labels": {"project_id": "my-project-123", "location": "global"}
+      },
+      "protoPayload": {
+        "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+        "serviceName": "cloudresourcemanager.googleapis.com",
+        "methodName": "SetIamPolicy",
+        "authenticationInfo": {"principalEmail": "attacker@evil.com"},
+        "requestMetadata": {"callerIp": "203.0.113.200", "callerSuppliedUserAgent": "google-cloud-sdk"},
+        "request": {
+          "policy": {
+            "bindings": [
+              {"role": "roles/owner", "members": ["user:attacker@evil.com"]},
+              {"role": "roles/editor", "members": ["serviceAccount:backdoor-sa@my-project-123.iam.gserviceaccount.com"]}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "logName": "projects/my-project-123/logs/cloudaudit.googleapis.com%2Factivity",
+      "timestamp": "2026-03-12T11:06:00Z",
+      "receiveTimestamp": "2026-03-12T11:06:01Z",
+      "severity": "NOTICE",
+      "resource": {
+        "type": "iam_role",
+        "labels": {"project_id": "my-project-123", "location": "global"}
+      },
+      "protoPayload": {
+        "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+        "serviceName": "iam.googleapis.com",
+        "methodName": "google.iam.admin.v1.CreateRole",
+        "authenticationInfo": {"principalEmail": "attacker@evil.com"},
+        "requestMetadata": {"callerIp": "203.0.113.200", "callerSuppliedUserAgent": "google-cloud-sdk"},
+        "request": {"role_id": "customSuperAdmin", "role": {"title": "Custom Super Admin", "includedPermissions": ["*"]}}
+      }
+    },
+    {
+      "logName": "projects/my-project-123/logs/cloudaudit.googleapis.com%2Factivity",
+      "timestamp": "2026-03-12T11:10:00Z",
+      "receiveTimestamp": "2026-03-12T11:10:01Z",
+      "severity": "WARNING",
+      "resource": {
+        "type": "logging_sink",
+        "labels": {"project_id": "my-project-123", "name": "audit-log-sink", "location": "global"}
+      },
+      "protoPayload": {
+        "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+        "serviceName": "logging.googleapis.com",
+        "methodName": "google.logging.v2.ConfigServiceV2.DeleteSink",
+        "authenticationInfo": {"principalEmail": "attacker@evil.com"},
+        "requestMetadata": {"callerIp": "203.0.113.200", "callerSuppliedUserAgent": "google-cloud-sdk"},
+        "request": {"sinkName": "projects/my-project-123/sinks/audit-log-sink"}
+      }
+    },
+    {
+      "logName": "projects/my-project-123/logs/cloudaudit.googleapis.com%2Factivity",
+      "timestamp": "2026-03-12T11:11:00Z",
+      "receiveTimestamp": "2026-03-12T11:11:01Z",
+      "severity": "WARNING",
+      "resource": {
+        "type": "gce_firewall_rule",
+        "labels": {"project_id": "my-project-123", "firewall_rule_id": "1234567890", "location": "global"}
+      },
+      "protoPayload": {
+        "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+        "serviceName": "compute.googleapis.com",
+        "methodName": "v1.compute.firewalls.delete",
+        "authenticationInfo": {"principalEmail": "attacker@evil.com"},
+        "requestMetadata": {"callerIp": "203.0.113.200", "callerSuppliedUserAgent": "google-cloud-sdk"},
+        "request": {"firewall": "deny-all-ingress"}
+      }
+    },
+    {
+      "logName": "projects/my-project-123/logs/cloudaudit.googleapis.com%2Factivity",
+      "timestamp": "2026-03-12T11:15:00Z",
+      "receiveTimestamp": "2026-03-12T11:15:01Z",
+      "severity": "NOTICE",
+      "resource": {
+        "type": "gcs_bucket",
+        "labels": {"project_id": "my-project-123", "bucket_name": "sensitive-data-bucket", "location": "us-central1"}
+      },
+      "protoPayload": {
+        "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+        "serviceName": "storage.googleapis.com",
+        "methodName": "storage.setIamPermissions",
+        "authenticationInfo": {"principalEmail": "attacker@evil.com"},
+        "requestMetadata": {"callerIp": "203.0.113.200", "callerSuppliedUserAgent": "google-cloud-sdk"},
+        "request": {
+          "policy": {
+            "bindings": [
+              {"role": "roles/storage.objectViewer", "members": ["allUsers"]}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "logName": "projects/my-project-123/logs/cloudaudit.googleapis.com%2Factivity",
+      "timestamp": "2026-03-12T11:20:00Z",
+      "receiveTimestamp": "2026-03-12T11:20:01Z",
+      "severity": "WARNING",
+      "resource": {
+        "type": "gce_firewall_rule",
+        "labels": {"project_id": "my-project-123", "firewall_rule_id": "9876543210", "location": "global"}
+      },
+      "protoPayload": {
+        "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+        "serviceName": "compute.googleapis.com",
+        "methodName": "v1.compute.firewalls.insert",
+        "authenticationInfo": {"principalEmail": "attacker@evil.com"},
+        "requestMetadata": {"callerIp": "203.0.113.200", "callerSuppliedUserAgent": "google-cloud-sdk"},
+        "request": {
+          "name": "allow-all-ssh",
+          "direction": "INGRESS",
+          "allowed": [{"IPProtocol": "tcp", "ports": ["22"]}],
+          "sourceRanges": ["0.0.0.0/0"]
+        }
+      }
+    },
+    {
+      "logName": "projects/my-project-123/logs/cloudaudit.googleapis.com%2Factivity",
+      "timestamp": "2026-03-12T11:25:00Z",
+      "receiveTimestamp": "2026-03-12T11:25:01Z",
+      "severity": "WARNING",
+      "resource": {
+        "type": "gce_instance",
+        "labels": {"project_id": "my-project-123", "instance_id": "1234567890123456", "zone": "us-central1-a", "location": "us-central1-a"}
+      },
+      "protoPayload": {
+        "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+        "serviceName": "compute.googleapis.com",
+        "methodName": "v1.compute.instances.delete",
+        "authenticationInfo": {"principalEmail": "attacker@evil.com"},
+        "requestMetadata": {"callerIp": "203.0.113.200", "callerSuppliedUserAgent": "google-cloud-sdk"},
+        "request": {"instance": "production-web-server"}
+      }
+    },
+    {
+      "logName": "projects/my-project-123/logs/cloudaudit.googleapis.com%2Factivity",
+      "timestamp": "2026-03-12T11:30:00Z",
+      "receiveTimestamp": "2026-03-12T11:30:01Z",
+      "severity": "WARNING",
+      "resource": {
+        "type": "cloudkms_cryptokeyversion",
+        "labels": {"project_id": "my-project-123", "location": "global"}
+      },
+      "protoPayload": {
+        "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+        "serviceName": "cloudkms.googleapis.com",
+        "methodName": "DestroyCryptoKeyVersion",
+        "authenticationInfo": {"principalEmail": "attacker@evil.com"},
+        "requestMetadata": {"callerIp": "203.0.113.200", "callerSuppliedUserAgent": "google-cloud-sdk"},
+        "request": {"name": "projects/my-project-123/locations/global/keyRings/prod-keyring/cryptoKeys/data-key/cryptoKeyVersions/1"}
+      }
+    }
+  ]
+}

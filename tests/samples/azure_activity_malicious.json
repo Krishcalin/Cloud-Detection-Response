@@ -1,0 +1,217 @@
+{
+  "value": [
+    {
+      "time": "2026-03-12T10:00:00Z",
+      "operationName": {"value": "Sign-in activity", "localizedValue": "Sign-in activity"},
+      "category": "SignInLogs",
+      "caller": "attacker@evil.com",
+      "callerIpAddress": "203.0.113.100",
+      "location": "RU",
+      "properties": {
+        "userPrincipalName": "admin@contoso.com",
+        "ipAddress": "203.0.113.100",
+        "riskLevelDuringSignIn": "high",
+        "status": {"errorCode": 0, "failureReason": null},
+        "authenticationDetails": [
+          {"authenticationMethod": "Password", "succeeded": true}
+        ]
+      }
+    },
+    {
+      "time": "2026-03-12T10:01:00Z",
+      "operationName": {"value": "Sign-in activity", "localizedValue": "Sign-in activity"},
+      "category": "SignInLogs",
+      "caller": "bruteforcer@evil.com",
+      "callerIpAddress": "198.51.100.44",
+      "location": "CN",
+      "properties": {
+        "userPrincipalName": "cfo@contoso.com",
+        "ipAddress": "198.51.100.44",
+        "riskLevelDuringSignIn": "none",
+        "status": {"errorCode": 50126, "failureReason": "Invalid username or password"},
+        "authenticationDetails": []
+      }
+    },
+    {
+      "time": "2026-03-12T10:02:00Z",
+      "operationName": {"value": "Sign-in activity", "localizedValue": "Sign-in activity"},
+      "category": "SignInLogs",
+      "caller": "user@contoso.com",
+      "callerIpAddress": "10.0.1.50",
+      "location": "US",
+      "properties": {
+        "userPrincipalName": "user@contoso.com",
+        "ipAddress": "10.0.1.50",
+        "riskLevelDuringSignIn": "none",
+        "status": {"errorCode": 0, "failureReason": null},
+        "authenticationDetails": [
+          {"authenticationMethod": "Password", "succeeded": true}
+        ]
+      }
+    },
+    {
+      "time": "2026-03-12T10:10:00Z",
+      "operationName": {"value": "Add user", "localizedValue": "Add user"},
+      "category": "AuditLogs",
+      "caller": "admin@contoso.com",
+      "callerIpAddress": "203.0.113.100",
+      "location": "US",
+      "properties": {
+        "targetResources": [{"displayName": "backdoor-user", "type": "User"}],
+        "initiatedBy": {"user": {"userPrincipalName": "admin@contoso.com"}}
+      }
+    },
+    {
+      "time": "2026-03-12T10:11:00Z",
+      "operationName": {"value": "Invite external user", "localizedValue": "Invite external user"},
+      "category": "AuditLogs",
+      "caller": "admin@contoso.com",
+      "callerIpAddress": "203.0.113.100",
+      "location": "US",
+      "properties": {
+        "targetResources": [{"displayName": "evil-guest@external.com", "type": "User"}],
+        "initiatedBy": {"user": {"userPrincipalName": "admin@contoso.com"}}
+      }
+    },
+    {
+      "time": "2026-03-12T10:12:00Z",
+      "operationName": {"value": "Add service principal credentials", "localizedValue": "Add service principal credentials"},
+      "category": "AuditLogs",
+      "caller": "admin@contoso.com",
+      "callerIpAddress": "203.0.113.100",
+      "location": "US",
+      "properties": {
+        "targetResources": [{"displayName": "MaliciousApp", "type": "ServicePrincipal"}],
+        "initiatedBy": {"user": {"userPrincipalName": "admin@contoso.com"}}
+      }
+    },
+    {
+      "time": "2026-03-12T10:13:00Z",
+      "operationName": {"value": "Consent to application", "localizedValue": "Consent to application"},
+      "category": "AuditLogs",
+      "caller": "admin@contoso.com",
+      "callerIpAddress": "203.0.113.100",
+      "location": "US",
+      "properties": {
+        "targetResources": [{"displayName": "ShadowApp", "type": "ServicePrincipal"}],
+        "initiatedBy": {"user": {"userPrincipalName": "admin@contoso.com"}}
+      }
+    },
+    {
+      "time": "2026-03-12T10:15:00Z",
+      "operationName": {"value": "Add member to role", "localizedValue": "Add member to role"},
+      "category": "AuditLogs",
+      "caller": "admin@contoso.com",
+      "callerIpAddress": "203.0.113.100",
+      "location": "US",
+      "properties": {
+        "targetResources": [
+          {"displayName": "backdoor-user", "type": "User"},
+          {"displayName": "Global Administrator", "type": "Role", "id": "62e90394-69f5-4237-9190-012177145e10"}
+        ],
+        "initiatedBy": {"user": {"userPrincipalName": "admin@contoso.com"}}
+      }
+    },
+    {
+      "time": "2026-03-12T10:16:00Z",
+      "operationName": {"value": "Add eligible member to role", "localizedValue": "Add eligible member to role"},
+      "category": "AuditLogs",
+      "caller": "admin@contoso.com",
+      "callerIpAddress": "203.0.113.100",
+      "location": "US",
+      "properties": {
+        "targetResources": [
+          {"displayName": "evil-guest@external.com", "type": "User"},
+          {"displayName": "User Administrator", "type": "Role"}
+        ],
+        "initiatedBy": {"user": {"userPrincipalName": "admin@contoso.com"}}
+      }
+    },
+    {
+      "time": "2026-03-12T10:20:00Z",
+      "operationName": {"value": "Update conditional access policy", "localizedValue": "Update conditional access policy"},
+      "category": "AuditLogs",
+      "caller": "admin@contoso.com",
+      "callerIpAddress": "203.0.113.100",
+      "location": "US",
+      "properties": {
+        "targetResources": [{"displayName": "Require MFA for Admins", "type": "Policy"}],
+        "initiatedBy": {"user": {"userPrincipalName": "admin@contoso.com"}}
+      }
+    },
+    {
+      "time": "2026-03-12T10:21:00Z",
+      "operationName": {"value": "Delete conditional access policy", "localizedValue": "Delete conditional access policy"},
+      "category": "AuditLogs",
+      "caller": "admin@contoso.com",
+      "callerIpAddress": "203.0.113.100",
+      "location": "US",
+      "properties": {
+        "targetResources": [{"displayName": "Block Legacy Auth", "type": "Policy"}],
+        "initiatedBy": {"user": {"userPrincipalName": "admin@contoso.com"}}
+      }
+    },
+    {
+      "time": "2026-03-12T10:22:00Z",
+      "operationName": {"value": "Delete diagnostic setting", "localizedValue": "Delete diagnostic setting"},
+      "category": "AuditLogs",
+      "caller": "admin@contoso.com",
+      "callerIpAddress": "203.0.113.100",
+      "location": "US",
+      "properties": {
+        "targetResources": [{"displayName": "SignInLogsDiag", "type": "DiagnosticSetting"}],
+        "initiatedBy": {"user": {"userPrincipalName": "admin@contoso.com"}}
+      }
+    },
+    {
+      "time": "2026-03-12T10:23:00Z",
+      "operationName": {"value": "Update security policy", "localizedValue": "Update security policy"},
+      "category": "AuditLogs",
+      "caller": "admin@contoso.com",
+      "callerIpAddress": "203.0.113.100",
+      "location": "US",
+      "properties": {
+        "targetResources": [{"displayName": "DefenderForServers", "type": "SecurityPolicy"}],
+        "initiatedBy": {"user": {"userPrincipalName": "admin@contoso.com"}}
+      }
+    },
+    {
+      "time": "2026-03-12T10:25:00Z",
+      "operationName": {"value": "Create or Update Security Rule", "localizedValue": "Create or Update Security Rule"},
+      "category": "Administrative",
+      "caller": "admin@contoso.com",
+      "callerIpAddress": "203.0.113.100",
+      "location": "eastus",
+      "resourceId": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/prod-rg/providers/Microsoft.Network/networkSecurityGroups/prod-nsg/securityRules/allow-all-ssh",
+      "properties": {
+        "sourceAddressPrefix": "*",
+        "destinationPortRange": "22",
+        "protocol": "TCP",
+        "access": "Allow",
+        "direction": "Inbound"
+      }
+    },
+    {
+      "time": "2026-03-12T10:30:00Z",
+      "operationName": {"value": "Delete resource group", "localizedValue": "Delete resource group"},
+      "category": "Administrative",
+      "caller": "admin@contoso.com",
+      "callerIpAddress": "203.0.113.100",
+      "location": "eastus",
+      "resourceId": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/production-databases",
+      "properties": {}
+    },
+    {
+      "time": "2026-03-12T10:31:00Z",
+      "operationName": {"value": "SecretDelete", "localizedValue": "SecretDelete"},
+      "category": "AuditEvent",
+      "caller": "admin@contoso.com",
+      "callerIpAddress": "203.0.113.100",
+      "location": "eastus",
+      "resourceId": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/prod-rg/providers/Microsoft.KeyVault/vaults/prod-vault",
+      "properties": {
+        "secretName": "database-connection-string"
+      }
+    }
+  ]
+}

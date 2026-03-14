@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#dc2626"/>
+      <stop offset="50%" style="stop-color:#991b1b"/>
+      <stop offset="100%" style="stop-color:#7f1d1d"/>
+    </linearGradient>
+    <linearGradient id="shield" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#fca5a5"/>
+      <stop offset="100%" style="stop-color:#f87171"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="300" rx="16" fill="url(#bg)"/>
+  <!-- Shield icon -->
+  <g transform="translate(80, 60)">
+    <path d="M90 10 L170 45 L170 105 C170 155 135 195 90 210 C45 195 10 155 10 105 L10 45 Z"
+          fill="url(#shield)" opacity="0.2" stroke="#fca5a5" stroke-width="3"/>
+    <!-- Alert triangle inside shield -->
+    <path d="M90 75 L115 120 L65 120 Z" fill="none" stroke="#fca5a5" stroke-width="4" stroke-linejoin="round"/>
+    <line x1="90" y1="93" x2="90" y2="105" stroke="#fca5a5" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="90" cy="113" r="2.5" fill="#fca5a5"/>
+    <!-- Radar/scan lines -->
+    <circle cx="90" cy="110" r="35" fill="none" stroke="#fca5a5" stroke-width="1" opacity="0.3"/>
+    <circle cx="90" cy="110" r="55" fill="none" stroke="#fca5a5" stroke-width="1" opacity="0.2"/>
+    <circle cx="90" cy="110" r="75" fill="none" stroke="#fca5a5" stroke-width="1" opacity="0.1"/>
+  </g>
+  <!-- Title text -->
+  <text x="290" y="120" font-family="Segoe UI, Arial, sans-serif" font-size="52" font-weight="700" fill="#ffffff" letter-spacing="1">
+    Cloud Detection &amp; Response
+  </text>
+  <!-- Subtitle -->
+  <text x="290" y="165" font-family="Segoe UI, Arial, sans-serif" font-size="22" fill="#fca5a5" letter-spacing="0.5">
+    Threat Detection Engine for Cloud Audit Logs
+  </text>
+  <!-- Tags -->
+  <g transform="translate(290, 190)">
+    <rect x="0" y="0" width="130" height="30" rx="15" fill="rgba(255,255,255,0.15)"/>
+    <text x="65" y="20" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#fecaca" text-anchor="middle">AWS CloudTrail</text>
+    <rect x="142" y="0" width="120" height="30" rx="15" fill="rgba(255,255,255,0.15)"/>
+    <text x="202" y="20" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#fecaca" text-anchor="middle">Azure Activity</text>
+    <rect x="274" y="0" width="110" height="30" rx="15" fill="rgba(255,255,255,0.15)"/>
+    <text x="329" y="20" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#fecaca" text-anchor="middle">GCP Audit</text>
+    <rect x="396" y="0" width="140" height="30" rx="15" fill="rgba(255,255,255,0.15)"/>
+    <text x="466" y="20" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#fecaca" text-anchor="middle">MITRE ATT&amp;CK</text>
+    <rect x="548" y="0" width="140" height="30" rx="15" fill="rgba(255,255,255,0.15)"/>
+    <text x="618" y="20" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#fecaca" text-anchor="middle">59 Detection Rules</text>
+  </g>
+  <!-- Version badge -->
+  <rect x="1040" y="250" width="120" height="28" rx="14" fill="rgba(255,255,255,0.15)"/>
+  <text x="1100" y="269" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#fecaca" text-anchor="middle">v1.0.0</text>
+</svg>
