@@ -1,0 +1,2846 @@
+{
+  "scanner": "Cloud Detection & Response (CDR) Scanner",
+  "version": "1.0.0",
+  "analysis_date": "2026-03-31T02:21:52.202106+00:00",
+  "files_scanned": 3,
+  "events_analysed": 62,
+  "cloud_summary": {
+    "aws": 1,
+    "azure": 1,
+    "gcp": 1
+  },
+  "tactic_summary": {
+    "Initial Access": 9,
+    "Persistence": 11,
+    "Privilege Escalation": 8,
+    "Defense Evasion": 13,
+    "Network": 5,
+    "Impact": 9,
+    "Credential Access": 3,
+    "Discovery": 4,
+    "Exfiltration": 4
+  },
+  "summary": {
+    "CRITICAL": 23,
+    "HIGH": 28,
+    "MEDIUM": 13,
+    "LOW": 2,
+    "INFO": 0
+  },
+  "findings": [
+    {
+      "rule_id": "CDR-AWS-IA-001",
+      "name": "Root account login detected",
+      "tactic": "Initial Access",
+      "severity": "CRITICAL",
+      "cloud": "AWS",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\cloudtrail_malicious.json",
+      "event_time": "2026-03-12T08:15:00Z",
+      "event_name": "ConsoleLogin",
+      "actor": "arn:aws:iam::123456789012:root",
+      "source_ip": "203.0.113.50",
+      "region": "us-east-1",
+      "description": "AWS root account was used to log in. Root should never be used for daily operations.",
+      "recommendation": "Disable root account console access. Use IAM users with MFA instead.",
+      "mitre": [
+        "T1078.004"
+      ],
+      "compliance": [
+        "CIS-AWS",
+        "NIST-800-53"
+      ],
+      "raw_event": {
+        "userIdentity": {
+          "type": "Root",
+          "principalId": "123456789012",
+          "arn": "arn:aws:iam::123456789012:root",
+          "accountId": "123456789012",
+          "accessKeyId": "AKIAIOSFODNN7EXAMPLE"
+        },
+        "eventTime": "2026-03-12T08:15:00Z",
+        "eventName": "ConsoleLogin",
+        "awsRegion": "us-east-1",
+        "sourceIPAddress": "203.0.113.50",
+        "requestParameters": null,
+        "responseElements": {
+          "ConsoleLogin": "Success"
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AWS-PR-001",
+      "name": "AdministratorAccess policy attached",
+      "tactic": "Privilege Escalation",
+      "severity": "CRITICAL",
+      "cloud": "AWS",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\cloudtrail_malicious.json",
+      "event_time": "2026-03-12T08:33:00Z",
+      "event_name": "AttachUserPolicy",
+      "actor": "arn:aws:iam::123456789012:user/attacker",
+      "source_ip": "203.0.113.50",
+      "region": "us-east-1",
+      "description": "AdministratorAccess policy attached \u2014 grants full AWS access.",
+      "recommendation": "Follow least privilege. Use scoped policies instead of AdministratorAccess.",
+      "mitre": [
+        "T1098.003"
+      ],
+      "compliance": [
+        "CIS-AWS",
+        "NIST-800-53",
+        "SOC2"
+      ],
+      "raw_event": {
+        "userIdentity": {
+          "type": "IAMUser",
+          "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+          "arn": "arn:aws:iam::123456789012:user/attacker",
+          "accountId": "123456789012",
+          "userName": "attacker"
+        },
+        "eventTime": "2026-03-12T08:33:00Z",
+        "eventName": "AttachUserPolicy",
+        "awsRegion": "us-east-1",
+        "sourceIPAddress": "203.0.113.50",
+        "requestParameters": {
+          "userName": "backdoor-user",
+          "policyArn": "arn:aws:iam::aws:policy/AdministratorAccess"
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AWS-DE-001",
+      "name": "CloudTrail logging stopped",
+      "tactic": "Defense Evasion",
+      "severity": "CRITICAL",
+      "cloud": "AWS",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\cloudtrail_malicious.json",
+      "event_time": "2026-03-12T08:40:00Z",
+      "event_name": "StopLogging",
+      "actor": "arn:aws:iam::123456789012:user/attacker",
+      "source_ip": "203.0.113.50",
+      "region": "us-east-1",
+      "description": "CloudTrail logging was stopped \u2014 attacker covering tracks.",
+      "recommendation": "Re-enable CloudTrail immediately. Investigate who stopped it and why.",
+      "mitre": [
+        "T1562.008"
+      ],
+      "compliance": [
+        "CIS-AWS",
+        "NIST-800-53",
+        "SOC2",
+        "PCI-DSS"
+      ],
+      "raw_event": {
+        "userIdentity": {
+          "type": "IAMUser",
+          "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+          "arn": "arn:aws:iam::123456789012:user/attacker",
+          "accountId": "123456789012",
+          "userName": "attacker"
+        },
+        "eventTime": "2026-03-12T08:40:00Z",
+        "eventName": "StopLogging",
+        "awsRegion": "us-east-1",
+        "sourceIPAddress": "203.0.113.50",
+        "requestParameters": {
+          "name": "arn:aws:cloudtrail:us-east-1:123456789012:trail/management-trail"
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AWS-DE-002",
+      "name": "CloudTrail trail deleted",
+      "tactic": "Defense Evasion",
+      "severity": "CRITICAL",
+      "cloud": "AWS",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\cloudtrail_malicious.json",
+      "event_time": "2026-03-12T08:41:00Z",
+      "event_name": "DeleteTrail",
+      "actor": "arn:aws:iam::123456789012:user/attacker",
+      "source_ip": "203.0.113.50",
+      "region": "us-east-1",
+      "description": "CloudTrail trail deleted \u2014 severe indicator of attacker covering tracks.",
+      "recommendation": "Recreate trail immediately. Investigate the actor and timeline.",
+      "mitre": [
+        "T1562.008"
+      ],
+      "compliance": [
+        "CIS-AWS",
+        "NIST-800-53",
+        "SOC2"
+      ],
+      "raw_event": {
+        "userIdentity": {
+          "type": "IAMUser",
+          "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+          "arn": "arn:aws:iam::123456789012:user/attacker",
+          "accountId": "123456789012",
+          "userName": "attacker"
+        },
+        "eventTime": "2026-03-12T08:41:00Z",
+        "eventName": "DeleteTrail",
+        "awsRegion": "us-east-1",
+        "sourceIPAddress": "203.0.113.50",
+        "requestParameters": {
+          "name": "arn:aws:cloudtrail:us-east-1:123456789012:trail/management-trail"
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AWS-DE-004",
+      "name": "GuardDuty detector disabled or deleted",
+      "tactic": "Defense Evasion",
+      "severity": "CRITICAL",
+      "cloud": "AWS",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\cloudtrail_malicious.json",
+      "event_time": "2026-03-12T08:43:00Z",
+      "event_name": "DeleteDetector",
+      "actor": "arn:aws:iam::123456789012:user/attacker",
+      "source_ip": "203.0.113.50",
+      "region": "us-east-1",
+      "description": "GuardDuty threat detection disabled or deleted.",
+      "recommendation": "Re-enable GuardDuty immediately. Investigate who disabled it.",
+      "mitre": [
+        "T1562.001"
+      ],
+      "compliance": [
+        "CIS-AWS",
+        "NIST-800-53"
+      ],
+      "raw_event": {
+        "userIdentity": {
+          "type": "IAMUser",
+          "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+          "arn": "arn:aws:iam::123456789012:user/attacker",
+          "accountId": "123456789012",
+          "userName": "attacker"
+        },
+        "eventTime": "2026-03-12T08:43:00Z",
+        "eventName": "DeleteDetector",
+        "awsRegion": "us-east-1",
+        "sourceIPAddress": "203.0.113.50",
+        "requestParameters": {
+          "detectorId": "abc123def456"
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AWS-DE-006",
+      "name": "Config recorder stopped or deleted",
+      "tactic": "Defense Evasion",
+      "severity": "CRITICAL",
+      "cloud": "AWS",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\cloudtrail_malicious.json",
+      "event_time": "2026-03-12T08:45:00Z",
+      "event_name": "StopConfigurationRecorder",
+      "actor": "arn:aws:iam::123456789012:user/attacker",
+      "source_ip": "203.0.113.50",
+      "region": "us-east-1",
+      "description": "AWS Config recorder stopped or deleted \u2014 compliance monitoring disabled.",
+      "recommendation": "Re-enable AWS Config. Investigate the actor.",
+      "mitre": [
+        "T1562.001"
+      ],
+      "compliance": [
+        "CIS-AWS",
+        "NIST-800-53"
+      ],
+      "raw_event": {
+        "userIdentity": {
+          "type": "IAMUser",
+          "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+          "arn": "arn:aws:iam::123456789012:user/attacker",
+          "accountId": "123456789012",
+          "userName": "attacker"
+        },
+        "eventTime": "2026-03-12T08:45:00Z",
+        "eventName": "StopConfigurationRecorder",
+        "awsRegion": "us-east-1",
+        "sourceIPAddress": "203.0.113.50",
+        "requestParameters": {
+          "configurationRecorderName": "default"
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AWS-EX-001",
+      "name": "S3 bucket policy made public",
+      "tactic": "Exfiltration",
+      "severity": "CRITICAL",
+      "cloud": "AWS",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\cloudtrail_malicious.json",
+      "event_time": "2026-03-12T09:00:00Z",
+      "event_name": "PutBucketAcl",
+      "actor": "arn:aws:iam::123456789012:user/attacker",
+      "source_ip": "203.0.113.50",
+      "region": "us-east-1",
+      "description": "S3 bucket ACL or policy changed to allow public access \u2014 data exposure risk.",
+      "recommendation": "Remove public access immediately. Enable S3 Block Public Access.",
+      "mitre": [
+        "T1530"
+      ],
+      "compliance": [
+        "CIS-AWS",
+        "NIST-800-53",
+        "PCI-DSS"
+      ],
+      "raw_event": {
+        "userIdentity": {
+          "type": "IAMUser",
+          "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+          "arn": "arn:aws:iam::123456789012:user/attacker",
+          "accountId": "123456789012",
+          "userName": "attacker"
+        },
+        "eventTime": "2026-03-12T09:00:00Z",
+        "eventName": "PutBucketAcl",
+        "awsRegion": "us-east-1",
+        "sourceIPAddress": "203.0.113.50",
+        "requestParameters": {
+          "bucketName": "sensitive-data-bucket",
+          "AccessControlPolicy": {
+            "AccessControlList": {
+              "Grant": [
+                {
+                  "Grantee": {
+                    "URI": "http://acs.amazonaws.com/groups/global/AllUsers"
+                  },
+                  "Permission": "public-read"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AWS-EX-002",
+      "name": "EBS snapshot shared publicly",
+      "tactic": "Exfiltration",
+      "severity": "CRITICAL",
+      "cloud": "AWS",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\cloudtrail_malicious.json",
+      "event_time": "2026-03-12T09:01:00Z",
+      "event_name": "ModifySnapshotAttribute",
+      "actor": "arn:aws:iam::123456789012:user/attacker",
+      "source_ip": "203.0.113.50",
+      "region": "us-east-1",
+      "description": "EBS snapshot shared publicly or with external account.",
+      "recommendation": "Remove public sharing. Review snapshot contents for sensitive data.",
+      "mitre": [
+        "T1537"
+      ],
+      "compliance": [
+        "CIS-AWS",
+        "NIST-800-53"
+      ],
+      "raw_event": {
+        "userIdentity": {
+          "type": "IAMUser",
+          "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+          "arn": "arn:aws:iam::123456789012:user/attacker",
+          "accountId": "123456789012",
+          "userName": "attacker"
+        },
+        "eventTime": "2026-03-12T09:01:00Z",
+        "eventName": "ModifySnapshotAttribute",
+        "awsRegion": "us-east-1",
+        "sourceIPAddress": "203.0.113.50",
+        "requestParameters": {
+          "snapshotId": "snap-0123456789abcdef0",
+          "createVolumePermission": {
+            "add": {
+              "items": [
+                {
+                  "group": "all"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AWS-EX-003",
+      "name": "RDS snapshot shared externally",
+      "tactic": "Exfiltration",
+      "severity": "CRITICAL",
+      "cloud": "AWS",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\cloudtrail_malicious.json",
+      "event_time": "2026-03-12T09:02:00Z",
+      "event_name": "ModifyDBSnapshotAttribute",
+      "actor": "arn:aws:iam::123456789012:user/attacker",
+      "source_ip": "203.0.113.50",
+      "region": "us-east-1",
+      "description": "RDS database snapshot sharing modified \u2014 potential data exfiltration.",
+      "recommendation": "Verify the target account. Restrict snapshot sharing.",
+      "mitre": [
+        "T1537"
+      ],
+      "compliance": [
+        "NIST-800-53",
+        "PCI-DSS"
+      ],
+      "raw_event": {
+        "userIdentity": {
+          "type": "IAMUser",
+          "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+          "arn": "arn:aws:iam::123456789012:user/attacker",
+          "accountId": "123456789012",
+          "userName": "attacker"
+        },
+        "eventTime": "2026-03-12T09:02:00Z",
+        "eventName": "ModifyDBSnapshotAttribute",
+        "awsRegion": "us-east-1",
+        "sourceIPAddress": "203.0.113.50",
+        "requestParameters": {
+          "dBSnapshotIdentifier": "prod-db-snapshot",
+          "attributeName": "restore",
+          "valuesToAdd": [
+            "999888777666"
+          ]
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AWS-NET-001",
+      "name": "Security group opened to 0.0.0.0/0",
+      "tactic": "Network",
+      "severity": "CRITICAL",
+      "cloud": "AWS",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\cloudtrail_malicious.json",
+      "event_time": "2026-03-12T09:05:00Z",
+      "event_name": "AuthorizeSecurityGroupIngress",
+      "actor": "arn:aws:iam::123456789012:user/attacker",
+      "source_ip": "203.0.113.50",
+      "region": "us-east-1",
+      "description": "Security group rule added allowing traffic from any IP (0.0.0.0/0).",
+      "recommendation": "Restrict security group rules to specific CIDR ranges.",
+      "mitre": [
+        "T1190"
+      ],
+      "compliance": [
+        "CIS-AWS",
+        "NIST-800-53",
+        "PCI-DSS"
+      ],
+      "raw_event": {
+        "userIdentity": {
+          "type": "IAMUser",
+          "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+          "arn": "arn:aws:iam::123456789012:user/attacker",
+          "accountId": "123456789012",
+          "userName": "attacker"
+        },
+        "eventTime": "2026-03-12T09:05:00Z",
+        "eventName": "AuthorizeSecurityGroupIngress",
+        "awsRegion": "us-east-1",
+        "sourceIPAddress": "203.0.113.50",
+        "requestParameters": {
+          "groupId": "sg-0123456789abcdef0",
+          "ipPermissions": {
+            "items": [
+              {
+                "ipProtocol": "tcp",
+                "fromPort": 22,
+                "toPort": 22,
+                "ipRanges": {
+                  "items": [
+                    {
+                      "cidrIp": "0.0.0.0/0"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AWS-IM-002",
+      "name": "RDS instance or cluster deleted",
+      "tactic": "Impact",
+      "severity": "CRITICAL",
+      "cloud": "AWS",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\cloudtrail_malicious.json",
+      "event_time": "2026-03-12T09:12:00Z",
+      "event_name": "DeleteDBInstance",
+      "actor": "arn:aws:iam::123456789012:user/attacker",
+      "source_ip": "203.0.113.50",
+      "region": "us-east-1",
+      "description": "RDS database deleted \u2014 potential data destruction.",
+      "recommendation": "Enable deletion protection on production databases. Verify final snapshots.",
+      "mitre": [
+        "T1485"
+      ],
+      "compliance": [
+        "SOC2",
+        "PCI-DSS"
+      ],
+      "raw_event": {
+        "userIdentity": {
+          "type": "IAMUser",
+          "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+          "arn": "arn:aws:iam::123456789012:user/attacker",
+          "accountId": "123456789012",
+          "userName": "attacker"
+        },
+        "eventTime": "2026-03-12T09:12:00Z",
+        "eventName": "DeleteDBInstance",
+        "awsRegion": "us-east-1",
+        "sourceIPAddress": "203.0.113.50",
+        "requestParameters": {
+          "dBInstanceIdentifier": "prod-database",
+          "skipFinalSnapshot": true
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AWS-IM-005",
+      "name": "KMS key scheduled for deletion",
+      "tactic": "Impact",
+      "severity": "CRITICAL",
+      "cloud": "AWS",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\cloudtrail_malicious.json",
+      "event_time": "2026-03-12T09:15:00Z",
+      "event_name": "ScheduleKeyDeletion",
+      "actor": "arn:aws:iam::123456789012:user/attacker",
+      "source_ip": "203.0.113.50",
+      "region": "us-east-1",
+      "description": "KMS encryption key scheduled for deletion or disabled \u2014 may cause data loss.",
+      "recommendation": "Cancel key deletion if unauthorised. Review key usage before deletion.",
+      "mitre": [
+        "T1485"
+      ],
+      "compliance": [
+        "NIST-800-53",
+        "PCI-DSS"
+      ],
+      "raw_event": {
+        "userIdentity": {
+          "type": "IAMUser",
+          "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+          "arn": "arn:aws:iam::123456789012:user/attacker",
+          "accountId": "123456789012",
+          "userName": "attacker"
+        },
+        "eventTime": "2026-03-12T09:15:00Z",
+        "eventName": "ScheduleKeyDeletion",
+        "awsRegion": "us-east-1",
+        "sourceIPAddress": "203.0.113.50",
+        "requestParameters": {
+          "keyId": "mrk-0123456789abcdef0",
+          "pendingWindowInDays": 7
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AZ-PR-001",
+      "name": "Global Administrator role assigned",
+      "tactic": "Privilege Escalation",
+      "severity": "CRITICAL",
+      "cloud": "AZURE",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\azure_activity_malicious.json",
+      "event_time": "2026-03-12T10:15:00Z",
+      "event_name": "Add member to role",
+      "actor": "admin@contoso.com",
+      "source_ip": "203.0.113.100",
+      "region": "US",
+      "description": "Global Administrator role assigned \u2014 highest privilege in Entra ID.",
+      "recommendation": "Limit Global Admins to 2-4. Use PIM with time-bound assignments.",
+      "mitre": [
+        "T1098.003"
+      ],
+      "compliance": [
+        "CIS-AZURE",
+        "NIST-800-53",
+        "SOC2"
+      ],
+      "raw_event": {
+        "time": "2026-03-12T10:15:00Z",
+        "operationName": {
+          "value": "Add member to role",
+          "localizedValue": "Add member to role"
+        },
+        "caller": "admin@contoso.com",
+        "callerIpAddress": "203.0.113.100",
+        "properties": {
+          "targetResources": [
+            {
+              "displayName": "backdoor-user",
+              "type": "User"
+            },
+            {
+              "displayName": "Global Administrator",
+              "type": "Role",
+              "id": "62e90394-69f5-4237-9190-012177145e10"
+            }
+          ],
+          "initiatedBy": {
+            "user": {
+              "userPrincipalName": "admin@contoso.com"
+            }
+          }
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AZ-DE-001",
+      "name": "Conditional Access policy disabled or deleted",
+      "tactic": "Defense Evasion",
+      "severity": "CRITICAL",
+      "cloud": "AZURE",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\azure_activity_malicious.json",
+      "event_time": "2026-03-12T10:20:00Z",
+      "event_name": "Update conditional access policy",
+      "actor": "admin@contoso.com",
+      "source_ip": "203.0.113.100",
+      "region": "US",
+      "description": "Conditional Access policy modified or deleted \u2014 may weaken access controls.",
+      "recommendation": "Review the policy change. Ensure critical policies are protected.",
+      "mitre": [
+        "T1562.001"
+      ],
+      "compliance": [
+        "CIS-AZURE",
+        "NIST-800-53"
+      ],
+      "raw_event": {
+        "time": "2026-03-12T10:20:00Z",
+        "operationName": {
+          "value": "Update conditional access policy",
+          "localizedValue": "Update conditional access policy"
+        },
+        "caller": "admin@contoso.com",
+        "callerIpAddress": "203.0.113.100",
+        "properties": {
+          "targetResources": [
+            {
+              "displayName": "Require MFA for Admins",
+              "type": "Policy"
+            }
+          ],
+          "initiatedBy": {
+            "user": {
+              "userPrincipalName": "admin@contoso.com"
+            }
+          }
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AZ-DE-001",
+      "name": "Conditional Access policy disabled or deleted",
+      "tactic": "Defense Evasion",
+      "severity": "CRITICAL",
+      "cloud": "AZURE",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\azure_activity_malicious.json",
+      "event_time": "2026-03-12T10:21:00Z",
+      "event_name": "Delete conditional access policy",
+      "actor": "admin@contoso.com",
+      "source_ip": "203.0.113.100",
+      "region": "US",
+      "description": "Conditional Access policy modified or deleted \u2014 may weaken access controls.",
+      "recommendation": "Review the policy change. Ensure critical policies are protected.",
+      "mitre": [
+        "T1562.001"
+      ],
+      "compliance": [
+        "CIS-AZURE",
+        "NIST-800-53"
+      ],
+      "raw_event": {
+        "time": "2026-03-12T10:21:00Z",
+        "operationName": {
+          "value": "Delete conditional access policy",
+          "localizedValue": "Delete conditional access policy"
+        },
+        "caller": "admin@contoso.com",
+        "callerIpAddress": "203.0.113.100",
+        "properties": {
+          "targetResources": [
+            {
+              "displayName": "Block Legacy Auth",
+              "type": "Policy"
+            }
+          ],
+          "initiatedBy": {
+            "user": {
+              "userPrincipalName": "admin@contoso.com"
+            }
+          }
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AZ-DE-003",
+      "name": "Security Center/Defender setting disabled",
+      "tactic": "Defense Evasion",
+      "severity": "CRITICAL",
+      "cloud": "AZURE",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\azure_activity_malicious.json",
+      "event_time": "2026-03-12T10:23:00Z",
+      "event_name": "Update security policy",
+      "actor": "admin@contoso.com",
+      "source_ip": "203.0.113.100",
+      "region": "US",
+      "description": "Microsoft Defender for Cloud or Security Center setting modified.",
+      "recommendation": "Re-enable Defender settings. Investigate the actor.",
+      "mitre": [
+        "T1562.001"
+      ],
+      "compliance": [
+        "CIS-AZURE",
+        "NIST-800-53"
+      ],
+      "raw_event": {
+        "time": "2026-03-12T10:23:00Z",
+        "operationName": {
+          "value": "Update security policy",
+          "localizedValue": "Update security policy"
+        },
+        "caller": "admin@contoso.com",
+        "callerIpAddress": "203.0.113.100",
+        "properties": {
+          "targetResources": [
+            {
+              "displayName": "DefenderForServers",
+              "type": "SecurityPolicy"
+            }
+          ],
+          "initiatedBy": {
+            "user": {
+              "userPrincipalName": "admin@contoso.com"
+            }
+          }
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AZ-NET-001",
+      "name": "NSG rule allowing any source created",
+      "tactic": "Network",
+      "severity": "CRITICAL",
+      "cloud": "AZURE",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\azure_activity_malicious.json",
+      "event_time": "2026-03-12T10:25:00Z",
+      "event_name": "Create or Update Security Rule",
+      "actor": "admin@contoso.com",
+      "source_ip": "203.0.113.100",
+      "region": "eastus",
+      "description": "Network security group rule created \u2014 verify it does not allow unrestricted access.",
+      "recommendation": "Restrict NSG rules to specific source IPs/ranges.",
+      "mitre": [
+        "T1190"
+      ],
+      "compliance": [
+        "CIS-AZURE",
+        "NIST-800-53",
+        "PCI-DSS"
+      ],
+      "raw_event": {
+        "time": "2026-03-12T10:25:00Z",
+        "operationName": {
+          "value": "Create or Update Security Rule",
+          "localizedValue": "Create or Update Security Rule"
+        },
+        "caller": "admin@contoso.com",
+        "callerIpAddress": "203.0.113.100",
+        "properties": {
+          "sourceAddressPrefix": "*",
+          "destinationPortRange": "22",
+          "protocol": "TCP",
+          "access": "Allow",
+          "direction": "Inbound"
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AZ-IM-002",
+      "name": "Key Vault key or secret deleted",
+      "tactic": "Impact",
+      "severity": "CRITICAL",
+      "cloud": "AZURE",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\azure_activity_malicious.json",
+      "event_time": "2026-03-12T10:31:00Z",
+      "event_name": "SecretDelete",
+      "actor": "admin@contoso.com",
+      "source_ip": "203.0.113.100",
+      "region": "eastus",
+      "description": "Key Vault secret, key, or certificate deleted.",
+      "recommendation": "Enable soft delete and purge protection on Key Vaults.",
+      "mitre": [
+        "T1485"
+      ],
+      "compliance": [
+        "NIST-800-53",
+        "PCI-DSS"
+      ],
+      "raw_event": {
+        "time": "2026-03-12T10:31:00Z",
+        "operationName": {
+          "value": "SecretDelete",
+          "localizedValue": "SecretDelete"
+        },
+        "caller": "admin@contoso.com",
+        "callerIpAddress": "203.0.113.100",
+        "properties": {
+          "secretName": "database-connection-string"
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-GCP-PR-001",
+      "name": "IAM policy binding with Owner/Editor role",
+      "tactic": "Privilege Escalation",
+      "severity": "CRITICAL",
+      "cloud": "GCP",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\gcp_audit_malicious.json",
+      "event_time": "2026-03-12T11:05:00Z",
+      "event_name": "SetIamPolicy",
+      "actor": "attacker@evil.com",
+      "source_ip": "203.0.113.200",
+      "region": "global",
+      "description": "IAM policy binding with Owner or Editor role \u2014 highly permissive.",
+      "recommendation": "Use predefined or custom roles with least privilege.",
+      "mitre": [
+        "T1098.003"
+      ],
+      "compliance": [
+        "CIS-GCP",
+        "NIST-800-53"
+      ],
+      "raw_event": {
+        "timestamp": "2026-03-12T11:05:00Z",
+        "resource": {
+          "type": "project",
+          "labels": {
+            "project_id": "my-project-123",
+            "location": "global"
+          }
+        },
+        "protoPayload": {
+          "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+          "serviceName": "cloudresourcemanager.googleapis.com",
+          "methodName": "SetIamPolicy",
+          "authenticationInfo": {
+            "principalEmail": "attacker@evil.com"
+          },
+          "requestMetadata": {
+            "callerIp": "203.0.113.200",
+            "callerSuppliedUserAgent": "google-cloud-sdk"
+          },
+          "request": {
+            "policy": {
+              "bindings": [
+                {
+                  "role": "roles/owner",
+                  "members": [
+                    "user:attacker@evil.com"
+                  ]
+                },
+                {
+                  "role": "roles/editor",
+                  "members": [
+                    "serviceAccount:backdoor-sa@my-project-123.iam.gserviceaccount.com"
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-GCP-DE-001",
+      "name": "Audit log sink deleted",
+      "tactic": "Defense Evasion",
+      "severity": "CRITICAL",
+      "cloud": "GCP",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\gcp_audit_malicious.json",
+      "event_time": "2026-03-12T11:10:00Z",
+      "event_name": "google.logging.v2.ConfigServiceV2.DeleteSink",
+      "actor": "attacker@evil.com",
+      "source_ip": "203.0.113.200",
+      "region": "global",
+      "description": "Cloud Logging sink deleted \u2014 audit logs may be lost.",
+      "recommendation": "Recreate the logging sink. Investigate the actor.",
+      "mitre": [
+        "T1562.008"
+      ],
+      "compliance": [
+        "CIS-GCP",
+        "NIST-800-53"
+      ],
+      "raw_event": {
+        "timestamp": "2026-03-12T11:10:00Z",
+        "resource": {
+          "type": "logging_sink",
+          "labels": {
+            "project_id": "my-project-123",
+            "name": "audit-log-sink",
+            "location": "global"
+          }
+        },
+        "protoPayload": {
+          "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+          "serviceName": "logging.googleapis.com",
+          "methodName": "google.logging.v2.ConfigServiceV2.DeleteSink",
+          "authenticationInfo": {
+            "principalEmail": "attacker@evil.com"
+          },
+          "requestMetadata": {
+            "callerIp": "203.0.113.200",
+            "callerSuppliedUserAgent": "google-cloud-sdk"
+          },
+          "request": {
+            "sinkName": "projects/my-project-123/sinks/audit-log-sink"
+          }
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-GCP-EX-001",
+      "name": "GCS bucket made public",
+      "tactic": "Exfiltration",
+      "severity": "CRITICAL",
+      "cloud": "GCP",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\gcp_audit_malicious.json",
+      "event_time": "2026-03-12T11:15:00Z",
+      "event_name": "storage.setIamPermissions",
+      "actor": "attacker@evil.com",
+      "source_ip": "203.0.113.200",
+      "region": "us-central1",
+      "description": "GCS bucket IAM policy changed to allow public access.",
+      "recommendation": "Remove allUsers/allAuthenticatedUsers. Enable Uniform Bucket-Level Access.",
+      "mitre": [
+        "T1530"
+      ],
+      "compliance": [
+        "CIS-GCP",
+        "NIST-800-53",
+        "PCI-DSS"
+      ],
+      "raw_event": {
+        "timestamp": "2026-03-12T11:15:00Z",
+        "resource": {
+          "type": "gcs_bucket",
+          "labels": {
+            "project_id": "my-project-123",
+            "bucket_name": "sensitive-data-bucket",
+            "location": "us-central1"
+          }
+        },
+        "protoPayload": {
+          "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+          "serviceName": "storage.googleapis.com",
+          "methodName": "storage.setIamPermissions",
+          "authenticationInfo": {
+            "principalEmail": "attacker@evil.com"
+          },
+          "requestMetadata": {
+            "callerIp": "203.0.113.200",
+            "callerSuppliedUserAgent": "google-cloud-sdk"
+          },
+          "request": {
+            "policy": {
+              "bindings": [
+                {
+                  "role": "roles/storage.objectViewer",
+                  "members": [
+                    "allUsers"
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-GCP-NET-001",
+      "name": "Firewall rule allowing 0.0.0.0/0 created",
+      "tactic": "Network",
+      "severity": "CRITICAL",
+      "cloud": "GCP",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\gcp_audit_malicious.json",
+      "event_time": "2026-03-12T11:20:00Z",
+      "event_name": "v1.compute.firewalls.insert",
+      "actor": "attacker@evil.com",
+      "source_ip": "203.0.113.200",
+      "region": "global",
+      "description": "Firewall rule created allowing traffic from any IP.",
+      "recommendation": "Restrict source ranges. Use Identity-Aware Proxy for access.",
+      "mitre": [
+        "T1190"
+      ],
+      "compliance": [
+        "CIS-GCP",
+        "NIST-800-53",
+        "PCI-DSS"
+      ],
+      "raw_event": {
+        "timestamp": "2026-03-12T11:20:00Z",
+        "resource": {
+          "type": "gce_firewall_rule",
+          "labels": {
+            "project_id": "my-project-123",
+            "firewall_rule_id": "9876543210",
+            "location": "global"
+          }
+        },
+        "protoPayload": {
+          "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+          "serviceName": "compute.googleapis.com",
+          "methodName": "v1.compute.firewalls.insert",
+          "authenticationInfo": {
+            "principalEmail": "attacker@evil.com"
+          },
+          "requestMetadata": {
+            "callerIp": "203.0.113.200",
+            "callerSuppliedUserAgent": "google-cloud-sdk"
+          },
+          "request": {
+            "name": "allow-all-ssh",
+            "direction": "INGRESS",
+            "allowed": [
+              {
+                "IPProtocol": "tcp",
+                "ports": [
+                  "22"
+                ]
+              }
+            ],
+            "sourceRanges": [
+              "0.0.0.0/0"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-GCP-IM-002",
+      "name": "KMS key version destroyed",
+      "tactic": "Impact",
+      "severity": "CRITICAL",
+      "cloud": "GCP",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\gcp_audit_malicious.json",
+      "event_time": "2026-03-12T11:30:00Z",
+      "event_name": "DestroyCryptoKeyVersion",
+      "actor": "attacker@evil.com",
+      "source_ip": "203.0.113.200",
+      "region": "global",
+      "description": "Cloud KMS key version destroyed \u2014 encrypted data may become unrecoverable.",
+      "recommendation": "Review key usage. Enable key version destroy delay.",
+      "mitre": [
+        "T1485"
+      ],
+      "compliance": [
+        "NIST-800-53",
+        "PCI-DSS"
+      ],
+      "raw_event": {
+        "timestamp": "2026-03-12T11:30:00Z",
+        "resource": {
+          "type": "cloudkms_cryptokeyversion",
+          "labels": {
+            "project_id": "my-project-123",
+            "location": "global"
+          }
+        },
+        "protoPayload": {
+          "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+          "serviceName": "cloudkms.googleapis.com",
+          "methodName": "DestroyCryptoKeyVersion",
+          "authenticationInfo": {
+            "principalEmail": "attacker@evil.com"
+          },
+          "requestMetadata": {
+            "callerIp": "203.0.113.200",
+            "callerSuppliedUserAgent": "google-cloud-sdk"
+          },
+          "request": {
+            "name": "projects/my-project-123/locations/global/keyRings/prod-keyring/cryptoKeys/data-key/cryptoKeyVersions/1"
+          }
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AWS-IA-002",
+      "name": "Console login without MFA",
+      "tactic": "Initial Access",
+      "severity": "HIGH",
+      "cloud": "AWS",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\cloudtrail_malicious.json",
+      "event_time": "2026-03-12T08:15:00Z",
+      "event_name": "ConsoleLogin",
+      "actor": "arn:aws:iam::123456789012:root",
+      "source_ip": "203.0.113.50",
+      "region": "us-east-1",
+      "description": "User logged into AWS console without multi-factor authentication.",
+      "recommendation": "Enforce MFA for all IAM users with console access.",
+      "mitre": [
+        "T1078.004"
+      ],
+      "compliance": [
+        "CIS-AWS",
+        "NIST-800-53",
+        "PCI-DSS"
+      ],
+      "raw_event": {
+        "userIdentity": {
+          "type": "Root",
+          "principalId": "123456789012",
+          "arn": "arn:aws:iam::123456789012:root",
+          "accountId": "123456789012",
+          "accessKeyId": "AKIAIOSFODNN7EXAMPLE"
+        },
+        "eventTime": "2026-03-12T08:15:00Z",
+        "eventName": "ConsoleLogin",
+        "awsRegion": "us-east-1",
+        "sourceIPAddress": "203.0.113.50",
+        "requestParameters": null,
+        "responseElements": {
+          "ConsoleLogin": "Success"
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AWS-IA-002",
+      "name": "Console login without MFA",
+      "tactic": "Initial Access",
+      "severity": "HIGH",
+      "cloud": "AWS",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\cloudtrail_malicious.json",
+      "event_time": "2026-03-12T08:20:00Z",
+      "event_name": "ConsoleLogin",
+      "actor": "arn:aws:iam::123456789012:user/jsmith",
+      "source_ip": "198.51.100.22",
+      "region": "us-east-1",
+      "description": "User logged into AWS console without multi-factor authentication.",
+      "recommendation": "Enforce MFA for all IAM users with console access.",
+      "mitre": [
+        "T1078.004"
+      ],
+      "compliance": [
+        "CIS-AWS",
+        "NIST-800-53",
+        "PCI-DSS"
+      ],
+      "raw_event": {
+        "userIdentity": {
+          "type": "IAMUser",
+          "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+          "arn": "arn:aws:iam::123456789012:user/jsmith",
+          "accountId": "123456789012",
+          "userName": "jsmith"
+        },
+        "eventTime": "2026-03-12T08:20:00Z",
+        "eventName": "ConsoleLogin",
+        "awsRegion": "us-east-1",
+        "sourceIPAddress": "198.51.100.22",
+        "responseElements": {
+          "ConsoleLogin": "Success"
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AWS-PE-001",
+      "name": "IAM user created",
+      "tactic": "Persistence",
+      "severity": "HIGH",
+      "cloud": "AWS",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\cloudtrail_malicious.json",
+      "event_time": "2026-03-12T08:30:00Z",
+      "event_name": "CreateUser",
+      "actor": "arn:aws:iam::123456789012:user/attacker",
+      "source_ip": "203.0.113.50",
+      "region": "us-east-1",
+      "description": "New IAM user created \u2014 could be a backdoor account.",
+      "recommendation": "Verify the user creation was authorised. Review the user's permissions.",
+      "mitre": [
+        "T1136.003"
+      ],
+      "compliance": [
+        "CIS-AWS",
+        "SOC2"
+      ],
+      "raw_event": {
+        "userIdentity": {
+          "type": "IAMUser",
+          "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+          "arn": "arn:aws:iam::123456789012:user/attacker",
+          "accountId": "123456789012",
+          "userName": "attacker"
+        },
+        "eventTime": "2026-03-12T08:30:00Z",
+        "eventName": "CreateUser",
+        "awsRegion": "us-east-1",
+        "sourceIPAddress": "203.0.113.50",
+        "requestParameters": {
+          "userName": "backdoor-user"
+        },
+        "responseElements": {
+          "user": {
+            "userName": "backdoor-user",
+            "userId": "AIDA000000000EXAMPLE"
+          }
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AWS-PE-002",
+      "name": "Access key created",
+      "tactic": "Persistence",
+      "severity": "HIGH",
+      "cloud": "AWS",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\cloudtrail_malicious.json",
+      "event_time": "2026-03-12T08:31:00Z",
+      "event_name": "CreateAccessKey",
+      "actor": "arn:aws:iam::123456789012:user/attacker",
+      "source_ip": "203.0.113.50",
+      "region": "us-east-1",
+      "description": "New IAM access key created \u2014 could enable persistent programmatic access.",
+      "recommendation": "Verify key creation was authorised. Rotate keys regularly.",
+      "mitre": [
+        "T1098.001"
+      ],
+      "compliance": [
+        "CIS-AWS",
+        "NIST-800-53"
+      ],
+      "raw_event": {
+        "userIdentity": {
+          "type": "IAMUser",
+          "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+          "arn": "arn:aws:iam::123456789012:user/attacker",
+          "accountId": "123456789012",
+          "userName": "attacker"
+        },
+        "eventTime": "2026-03-12T08:31:00Z",
+        "eventName": "CreateAccessKey",
+        "awsRegion": "us-east-1",
+        "sourceIPAddress": "203.0.113.50",
+        "requestParameters": {
+          "userName": "backdoor-user"
+        },
+        "responseElements": {
+          "accessKey": {
+            "accessKeyId": "AKIAI44QH8DHBEXAMPLE",
+            "status": "Active"
+          }
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AWS-PE-003",
+      "name": "Login profile created (console access added)",
+      "tactic": "Persistence",
+      "severity": "HIGH",
+      "cloud": "AWS",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\cloudtrail_malicious.json",
+      "event_time": "2026-03-12T08:32:00Z",
+      "event_name": "CreateLoginProfile",
+      "actor": "arn:aws:iam::123456789012:user/attacker",
+      "source_ip": "203.0.113.50",
+      "region": "us-east-1",
+      "description": "Console login profile added to an IAM user \u2014 grants console access.",
+      "recommendation": "Verify this was intentional. Ensure MFA is required.",
+      "mitre": [
+        "T1098.001"
+      ],
+      "compliance": [
+        "CIS-AWS"
+      ],
+      "raw_event": {
+        "userIdentity": {
+          "type": "IAMUser",
+          "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+          "arn": "arn:aws:iam::123456789012:user/attacker",
+          "accountId": "123456789012",
+          "userName": "attacker"
+        },
+        "eventTime": "2026-03-12T08:32:00Z",
+        "eventName": "CreateLoginProfile",
+        "awsRegion": "us-east-1",
+        "sourceIPAddress": "203.0.113.50",
+        "requestParameters": {
+          "userName": "backdoor-user",
+          "passwordResetRequired": false
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AWS-PR-003",
+      "name": "Inline policy added to user",
+      "tactic": "Privilege Escalation",
+      "severity": "HIGH",
+      "cloud": "AWS",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\cloudtrail_malicious.json",
+      "event_time": "2026-03-12T08:34:00Z",
+      "event_name": "PutUserPolicy",
+      "actor": "arn:aws:iam::123456789012:user/attacker",
+      "source_ip": "203.0.113.50",
+      "region": "us-east-1",
+      "description": "Inline policy attached directly to IAM user \u2014 bypasses group-based controls.",
+      "recommendation": "Use managed policies attached to groups or roles instead.",
+      "mitre": [
+        "T1098.003"
+      ],
+      "compliance": [
+        "CIS-AWS"
+      ],
+      "raw_event": {
+        "userIdentity": {
+          "type": "IAMUser",
+          "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+          "arn": "arn:aws:iam::123456789012:user/attacker",
+          "accountId": "123456789012",
+          "userName": "attacker"
+        },
+        "eventTime": "2026-03-12T08:34:00Z",
+        "eventName": "PutUserPolicy",
+        "awsRegion": "us-east-1",
+        "sourceIPAddress": "203.0.113.50",
+        "requestParameters": {
+          "userName": "backdoor-user",
+          "policyName": "full-access",
+          "policyDocument": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"*\",\"Resource\":\"*\"}]}"
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AWS-DE-003",
+      "name": "CloudTrail event selectors modified",
+      "tactic": "Defense Evasion",
+      "severity": "HIGH",
+      "cloud": "AWS",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\cloudtrail_malicious.json",
+      "event_time": "2026-03-12T08:42:00Z",
+      "event_name": "PutEventSelectors",
+      "actor": "arn:aws:iam::123456789012:user/attacker",
+      "source_ip": "203.0.113.50",
+      "region": "us-east-1",
+      "description": "CloudTrail event selectors modified \u2014 may reduce logging coverage.",
+      "recommendation": "Verify logging configuration includes all management and data events.",
+      "mitre": [
+        "T1562.008"
+      ],
+      "compliance": [
+        "CIS-AWS"
+      ],
+      "raw_event": {
+        "userIdentity": {
+          "type": "IAMUser",
+          "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+          "arn": "arn:aws:iam::123456789012:user/attacker",
+          "accountId": "123456789012",
+          "userName": "attacker"
+        },
+        "eventTime": "2026-03-12T08:42:00Z",
+        "eventName": "PutEventSelectors",
+        "awsRegion": "us-east-1",
+        "sourceIPAddress": "203.0.113.50",
+        "requestParameters": {
+          "trailName": "remaining-trail",
+          "eventSelectors": []
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AWS-DE-005",
+      "name": "S3 bucket logging disabled",
+      "tactic": "Defense Evasion",
+      "severity": "HIGH",
+      "cloud": "AWS",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\cloudtrail_malicious.json",
+      "event_time": "2026-03-12T08:44:00Z",
+      "event_name": "PutBucketLogging",
+      "actor": "arn:aws:iam::123456789012:user/attacker",
+      "source_ip": "203.0.113.50",
+      "region": "us-east-1",
+      "description": "S3 bucket access logging configuration changed.",
+      "recommendation": "Ensure server access logging is enabled on all sensitive buckets.",
+      "mitre": [
+        "T1562.008"
+      ],
+      "compliance": [
+        "CIS-AWS",
+        "SOC2"
+      ],
+      "raw_event": {
+        "userIdentity": {
+          "type": "IAMUser",
+          "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+          "arn": "arn:aws:iam::123456789012:user/attacker",
+          "accountId": "123456789012",
+          "userName": "attacker"
+        },
+        "eventTime": "2026-03-12T08:44:00Z",
+        "eventName": "PutBucketLogging",
+        "awsRegion": "us-east-1",
+        "sourceIPAddress": "203.0.113.50",
+        "requestParameters": {
+          "bucketName": "sensitive-data-bucket",
+          "BucketLoggingStatus": {}
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AWS-DE-007",
+      "name": "VPC flow log deleted",
+      "tactic": "Defense Evasion",
+      "severity": "HIGH",
+      "cloud": "AWS",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\cloudtrail_malicious.json",
+      "event_time": "2026-03-12T08:46:00Z",
+      "event_name": "DeleteFlowLogs",
+      "actor": "arn:aws:iam::123456789012:user/attacker",
+      "source_ip": "203.0.113.50",
+      "region": "us-east-1",
+      "description": "VPC Flow Logs deleted \u2014 network monitoring disabled.",
+      "recommendation": "Recreate flow logs. Investigate who deleted them.",
+      "mitre": [
+        "T1562.008"
+      ],
+      "compliance": [
+        "CIS-AWS",
+        "NIST-800-53"
+      ],
+      "raw_event": {
+        "userIdentity": {
+          "type": "IAMUser",
+          "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+          "arn": "arn:aws:iam::123456789012:user/attacker",
+          "accountId": "123456789012",
+          "userName": "attacker"
+        },
+        "eventTime": "2026-03-12T08:46:00Z",
+        "eventName": "DeleteFlowLogs",
+        "awsRegion": "us-east-1",
+        "sourceIPAddress": "203.0.113.50",
+        "requestParameters": {
+          "DeleteFlowLogIds": [
+            "fl-0123456789abcdef0"
+          ]
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AWS-CA-003",
+      "name": "Password policy weakened",
+      "tactic": "Credential Access",
+      "severity": "HIGH",
+      "cloud": "AWS",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\cloudtrail_malicious.json",
+      "event_time": "2026-03-12T08:50:00Z",
+      "event_name": "UpdateAccountPasswordPolicy",
+      "actor": "arn:aws:iam::123456789012:user/attacker",
+      "source_ip": "203.0.113.50",
+      "region": "us-east-1",
+      "description": "IAM password policy was modified \u2014 may have been weakened.",
+      "recommendation": "Review password policy. Enforce strong password requirements.",
+      "mitre": [
+        "T1556"
+      ],
+      "compliance": [
+        "CIS-AWS",
+        "NIST-800-53"
+      ],
+      "raw_event": {
+        "userIdentity": {
+          "type": "IAMUser",
+          "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+          "arn": "arn:aws:iam::123456789012:user/attacker",
+          "accountId": "123456789012",
+          "userName": "attacker"
+        },
+        "eventTime": "2026-03-12T08:50:00Z",
+        "eventName": "UpdateAccountPasswordPolicy",
+        "awsRegion": "us-east-1",
+        "sourceIPAddress": "203.0.113.50",
+        "requestParameters": {
+          "minimumPasswordLength": 6,
+          "requireNumbers": false
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AWS-IM-001",
+      "name": "EC2 instances terminated in bulk",
+      "tactic": "Impact",
+      "severity": "HIGH",
+      "cloud": "AWS",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\cloudtrail_malicious.json",
+      "event_time": "2026-03-12T09:10:00Z",
+      "event_name": "TerminateInstances",
+      "actor": "arn:aws:iam::123456789012:user/attacker",
+      "source_ip": "203.0.113.50",
+      "region": "us-east-1",
+      "description": "EC2 instances terminated \u2014 potential destructive action.",
+      "recommendation": "Verify the termination was authorised. Enable termination protection on critical instances.",
+      "mitre": [
+        "T1578.003",
+        "T1485"
+      ],
+      "compliance": [
+        "SOC2"
+      ],
+      "raw_event": {
+        "userIdentity": {
+          "type": "IAMUser",
+          "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+          "arn": "arn:aws:iam::123456789012:user/attacker",
+          "accountId": "123456789012",
+          "userName": "attacker"
+        },
+        "eventTime": "2026-03-12T09:10:00Z",
+        "eventName": "TerminateInstances",
+        "awsRegion": "us-east-1",
+        "sourceIPAddress": "203.0.113.50",
+        "requestParameters": {
+          "instancesSet": {
+            "items": [
+              {
+                "instanceId": "i-0123456789abcdef0"
+              },
+              {
+                "instanceId": "i-0abcdef1234567890"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AWS-IM-003",
+      "name": "S3 bucket deleted",
+      "tactic": "Impact",
+      "severity": "HIGH",
+      "cloud": "AWS",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\cloudtrail_malicious.json",
+      "event_time": "2026-03-12T09:13:00Z",
+      "event_name": "DeleteBucket",
+      "actor": "arn:aws:iam::123456789012:user/attacker",
+      "source_ip": "203.0.113.50",
+      "region": "us-east-1",
+      "description": "S3 bucket deleted \u2014 potential data loss.",
+      "recommendation": "Enable versioning and MFA Delete on critical buckets.",
+      "mitre": [
+        "T1485"
+      ],
+      "compliance": [
+        "SOC2"
+      ],
+      "raw_event": {
+        "userIdentity": {
+          "type": "IAMUser",
+          "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+          "arn": "arn:aws:iam::123456789012:user/attacker",
+          "accountId": "123456789012",
+          "userName": "attacker"
+        },
+        "eventTime": "2026-03-12T09:13:00Z",
+        "eventName": "DeleteBucket",
+        "awsRegion": "us-east-1",
+        "sourceIPAddress": "203.0.113.50",
+        "requestParameters": {
+          "bucketName": "critical-backup-bucket"
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AWS-IM-004",
+      "name": "Potential cryptominer \u2014 large/GPU instance launched",
+      "tactic": "Impact",
+      "severity": "HIGH",
+      "cloud": "AWS",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\cloudtrail_malicious.json",
+      "event_time": "2026-03-12T09:14:00Z",
+      "event_name": "RunInstances",
+      "actor": "arn:aws:iam::123456789012:user/attacker",
+      "source_ip": "203.0.113.50",
+      "region": "us-east-1",
+      "description": "Large or GPU-based EC2 instance launched \u2014 potential cryptomining.",
+      "recommendation": "Verify the instance type is justified. Set up billing alerts.",
+      "mitre": [
+        "T1496"
+      ],
+      "compliance": [
+        "SOC2"
+      ],
+      "raw_event": {
+        "userIdentity": {
+          "type": "IAMUser",
+          "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+          "arn": "arn:aws:iam::123456789012:user/attacker",
+          "accountId": "123456789012",
+          "userName": "attacker"
+        },
+        "eventTime": "2026-03-12T09:14:00Z",
+        "eventName": "RunInstances",
+        "awsRegion": "us-east-1",
+        "sourceIPAddress": "203.0.113.50",
+        "requestParameters": {
+          "instanceType": "p4d.24xlarge",
+          "instancesSet": {
+            "items": [
+              {
+                "imageId": "ami-0123456789abcdef0"
+              }
+            ]
+          },
+          "minCount": 5,
+          "maxCount": 5
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AZ-IA-001",
+      "name": "Sign-in from unfamiliar location",
+      "tactic": "Initial Access",
+      "severity": "HIGH",
+      "cloud": "AZURE",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\azure_activity_malicious.json",
+      "event_time": "2026-03-12T10:00:00Z",
+      "event_name": "Sign-in activity",
+      "actor": "attacker@evil.com",
+      "source_ip": "203.0.113.100",
+      "region": "RU",
+      "description": "Sign-in detected from an unfamiliar or risky location.",
+      "recommendation": "Verify with the user. Enable Conditional Access with location-based policies.",
+      "mitre": [
+        "T1078.004"
+      ],
+      "compliance": [
+        "CIS-AZURE",
+        "NIST-800-53"
+      ],
+      "raw_event": {
+        "time": "2026-03-12T10:00:00Z",
+        "operationName": {
+          "value": "Sign-in activity",
+          "localizedValue": "Sign-in activity"
+        },
+        "caller": "attacker@evil.com",
+        "callerIpAddress": "203.0.113.100",
+        "properties": {
+          "userPrincipalName": "admin@contoso.com",
+          "ipAddress": "203.0.113.100",
+          "riskLevelDuringSignIn": "high",
+          "status": {
+            "errorCode": 0,
+            "failureReason": null
+          },
+          "authenticationDetails": [
+            {
+              "authenticationMethod": "Password",
+              "succeeded": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AZ-IA-003",
+      "name": "Sign-in without MFA",
+      "tactic": "Initial Access",
+      "severity": "HIGH",
+      "cloud": "AZURE",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\azure_activity_malicious.json",
+      "event_time": "2026-03-12T10:00:00Z",
+      "event_name": "Sign-in activity",
+      "actor": "attacker@evil.com",
+      "source_ip": "203.0.113.100",
+      "region": "RU",
+      "description": "Successful sign-in without MFA enforcement.",
+      "recommendation": "Enforce MFA via Conditional Access for all users.",
+      "mitre": [
+        "T1078.004"
+      ],
+      "compliance": [
+        "CIS-AZURE",
+        "NIST-800-53",
+        "PCI-DSS"
+      ],
+      "raw_event": {
+        "time": "2026-03-12T10:00:00Z",
+        "operationName": {
+          "value": "Sign-in activity",
+          "localizedValue": "Sign-in activity"
+        },
+        "caller": "attacker@evil.com",
+        "callerIpAddress": "203.0.113.100",
+        "properties": {
+          "userPrincipalName": "admin@contoso.com",
+          "ipAddress": "203.0.113.100",
+          "riskLevelDuringSignIn": "high",
+          "status": {
+            "errorCode": 0,
+            "failureReason": null
+          },
+          "authenticationDetails": [
+            {
+              "authenticationMethod": "Password",
+              "succeeded": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AZ-IA-003",
+      "name": "Sign-in without MFA",
+      "tactic": "Initial Access",
+      "severity": "HIGH",
+      "cloud": "AZURE",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\azure_activity_malicious.json",
+      "event_time": "2026-03-12T10:02:00Z",
+      "event_name": "Sign-in activity",
+      "actor": "user@contoso.com",
+      "source_ip": "10.0.1.50",
+      "region": "US",
+      "description": "Successful sign-in without MFA enforcement.",
+      "recommendation": "Enforce MFA via Conditional Access for all users.",
+      "mitre": [
+        "T1078.004"
+      ],
+      "compliance": [
+        "CIS-AZURE",
+        "NIST-800-53",
+        "PCI-DSS"
+      ],
+      "raw_event": {
+        "time": "2026-03-12T10:02:00Z",
+        "operationName": {
+          "value": "Sign-in activity",
+          "localizedValue": "Sign-in activity"
+        },
+        "caller": "user@contoso.com",
+        "callerIpAddress": "10.0.1.50",
+        "properties": {
+          "userPrincipalName": "user@contoso.com",
+          "ipAddress": "10.0.1.50",
+          "riskLevelDuringSignIn": "none",
+          "status": {
+            "errorCode": 0,
+            "failureReason": null
+          },
+          "authenticationDetails": [
+            {
+              "authenticationMethod": "Password",
+              "succeeded": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AZ-PE-001",
+      "name": "New user or guest account created",
+      "tactic": "Persistence",
+      "severity": "HIGH",
+      "cloud": "AZURE",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\azure_activity_malicious.json",
+      "event_time": "2026-03-12T10:10:00Z",
+      "event_name": "Add user",
+      "actor": "admin@contoso.com",
+      "source_ip": "203.0.113.100",
+      "region": "US",
+      "description": "New user or guest account created in Entra ID.",
+      "recommendation": "Verify account creation was authorised. Review assigned roles.",
+      "mitre": [
+        "T1136.003"
+      ],
+      "compliance": [
+        "CIS-AZURE",
+        "SOC2"
+      ],
+      "raw_event": {
+        "time": "2026-03-12T10:10:00Z",
+        "operationName": {
+          "value": "Add user",
+          "localizedValue": "Add user"
+        },
+        "caller": "admin@contoso.com",
+        "callerIpAddress": "203.0.113.100",
+        "properties": {
+          "targetResources": [
+            {
+              "displayName": "backdoor-user",
+              "type": "User"
+            }
+          ],
+          "initiatedBy": {
+            "user": {
+              "userPrincipalName": "admin@contoso.com"
+            }
+          }
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AZ-PE-001",
+      "name": "New user or guest account created",
+      "tactic": "Persistence",
+      "severity": "HIGH",
+      "cloud": "AZURE",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\azure_activity_malicious.json",
+      "event_time": "2026-03-12T10:11:00Z",
+      "event_name": "Invite external user",
+      "actor": "admin@contoso.com",
+      "source_ip": "203.0.113.100",
+      "region": "US",
+      "description": "New user or guest account created in Entra ID.",
+      "recommendation": "Verify account creation was authorised. Review assigned roles.",
+      "mitre": [
+        "T1136.003"
+      ],
+      "compliance": [
+        "CIS-AZURE",
+        "SOC2"
+      ],
+      "raw_event": {
+        "time": "2026-03-12T10:11:00Z",
+        "operationName": {
+          "value": "Invite external user",
+          "localizedValue": "Invite external user"
+        },
+        "caller": "admin@contoso.com",
+        "callerIpAddress": "203.0.113.100",
+        "properties": {
+          "targetResources": [
+            {
+              "displayName": "evil-guest@external.com",
+              "type": "User"
+            }
+          ],
+          "initiatedBy": {
+            "user": {
+              "userPrincipalName": "admin@contoso.com"
+            }
+          }
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AZ-PE-002",
+      "name": "Application credentials added",
+      "tactic": "Persistence",
+      "severity": "HIGH",
+      "cloud": "AZURE",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\azure_activity_malicious.json",
+      "event_time": "2026-03-12T10:12:00Z",
+      "event_name": "Add service principal credentials",
+      "actor": "admin@contoso.com",
+      "source_ip": "203.0.113.100",
+      "region": "US",
+      "description": "Credentials (secret or certificate) added to an application registration.",
+      "recommendation": "Verify the credential addition. Monitor for unused app credentials.",
+      "mitre": [
+        "T1098.001"
+      ],
+      "compliance": [
+        "CIS-AZURE"
+      ],
+      "raw_event": {
+        "time": "2026-03-12T10:12:00Z",
+        "operationName": {
+          "value": "Add service principal credentials",
+          "localizedValue": "Add service principal credentials"
+        },
+        "caller": "admin@contoso.com",
+        "callerIpAddress": "203.0.113.100",
+        "properties": {
+          "targetResources": [
+            {
+              "displayName": "MaliciousApp",
+              "type": "ServicePrincipal"
+            }
+          ],
+          "initiatedBy": {
+            "user": {
+              "userPrincipalName": "admin@contoso.com"
+            }
+          }
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AZ-PE-003",
+      "name": "OAuth2 consent grant (admin consent)",
+      "tactic": "Persistence",
+      "severity": "HIGH",
+      "cloud": "AZURE",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\azure_activity_malicious.json",
+      "event_time": "2026-03-12T10:13:00Z",
+      "event_name": "Consent to application",
+      "actor": "admin@contoso.com",
+      "source_ip": "203.0.113.100",
+      "region": "US",
+      "description": "Admin consent granted to an application \u2014 grants persistent API access.",
+      "recommendation": "Review the application permissions. Use admin consent workflow.",
+      "mitre": [
+        "T1528"
+      ],
+      "compliance": [
+        "CIS-AZURE",
+        "SOC2"
+      ],
+      "raw_event": {
+        "time": "2026-03-12T10:13:00Z",
+        "operationName": {
+          "value": "Consent to application",
+          "localizedValue": "Consent to application"
+        },
+        "caller": "admin@contoso.com",
+        "callerIpAddress": "203.0.113.100",
+        "properties": {
+          "targetResources": [
+            {
+              "displayName": "ShadowApp",
+              "type": "ServicePrincipal"
+            }
+          ],
+          "initiatedBy": {
+            "user": {
+              "userPrincipalName": "admin@contoso.com"
+            }
+          }
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AZ-PR-002",
+      "name": "Privileged role assigned",
+      "tactic": "Privilege Escalation",
+      "severity": "HIGH",
+      "cloud": "AZURE",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\azure_activity_malicious.json",
+      "event_time": "2026-03-12T10:15:00Z",
+      "event_name": "Add member to role",
+      "actor": "admin@contoso.com",
+      "source_ip": "203.0.113.100",
+      "region": "US",
+      "description": "Privileged directory role assigned to a user or service principal.",
+      "recommendation": "Verify the role assignment. Use PIM for just-in-time access.",
+      "mitre": [
+        "T1098.003"
+      ],
+      "compliance": [
+        "CIS-AZURE",
+        "NIST-800-53"
+      ],
+      "raw_event": {
+        "time": "2026-03-12T10:15:00Z",
+        "operationName": {
+          "value": "Add member to role",
+          "localizedValue": "Add member to role"
+        },
+        "caller": "admin@contoso.com",
+        "callerIpAddress": "203.0.113.100",
+        "properties": {
+          "targetResources": [
+            {
+              "displayName": "backdoor-user",
+              "type": "User"
+            },
+            {
+              "displayName": "Global Administrator",
+              "type": "Role",
+              "id": "62e90394-69f5-4237-9190-012177145e10"
+            }
+          ],
+          "initiatedBy": {
+            "user": {
+              "userPrincipalName": "admin@contoso.com"
+            }
+          }
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AZ-PR-002",
+      "name": "Privileged role assigned",
+      "tactic": "Privilege Escalation",
+      "severity": "HIGH",
+      "cloud": "AZURE",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\azure_activity_malicious.json",
+      "event_time": "2026-03-12T10:16:00Z",
+      "event_name": "Add eligible member to role",
+      "actor": "admin@contoso.com",
+      "source_ip": "203.0.113.100",
+      "region": "US",
+      "description": "Privileged directory role assigned to a user or service principal.",
+      "recommendation": "Verify the role assignment. Use PIM for just-in-time access.",
+      "mitre": [
+        "T1098.003"
+      ],
+      "compliance": [
+        "CIS-AZURE",
+        "NIST-800-53"
+      ],
+      "raw_event": {
+        "time": "2026-03-12T10:16:00Z",
+        "operationName": {
+          "value": "Add eligible member to role",
+          "localizedValue": "Add eligible member to role"
+        },
+        "caller": "admin@contoso.com",
+        "callerIpAddress": "203.0.113.100",
+        "properties": {
+          "targetResources": [
+            {
+              "displayName": "evil-guest@external.com",
+              "type": "User"
+            },
+            {
+              "displayName": "User Administrator",
+              "type": "Role"
+            }
+          ],
+          "initiatedBy": {
+            "user": {
+              "userPrincipalName": "admin@contoso.com"
+            }
+          }
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AZ-DE-002",
+      "name": "Diagnostic setting deleted",
+      "tactic": "Defense Evasion",
+      "severity": "HIGH",
+      "cloud": "AZURE",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\azure_activity_malicious.json",
+      "event_time": "2026-03-12T10:22:00Z",
+      "event_name": "Delete diagnostic setting",
+      "actor": "admin@contoso.com",
+      "source_ip": "203.0.113.100",
+      "region": "US",
+      "description": "Azure diagnostic logging setting deleted \u2014 audit trail disruption.",
+      "recommendation": "Re-enable diagnostic settings. Investigate who deleted them.",
+      "mitre": [
+        "T1562.008"
+      ],
+      "compliance": [
+        "CIS-AZURE",
+        "NIST-800-53"
+      ],
+      "raw_event": {
+        "time": "2026-03-12T10:22:00Z",
+        "operationName": {
+          "value": "Delete diagnostic setting",
+          "localizedValue": "Delete diagnostic setting"
+        },
+        "caller": "admin@contoso.com",
+        "callerIpAddress": "203.0.113.100",
+        "properties": {
+          "targetResources": [
+            {
+              "displayName": "SignInLogsDiag",
+              "type": "DiagnosticSetting"
+            }
+          ],
+          "initiatedBy": {
+            "user": {
+              "userPrincipalName": "admin@contoso.com"
+            }
+          }
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AZ-IM-001",
+      "name": "Resource group or resource deleted",
+      "tactic": "Impact",
+      "severity": "HIGH",
+      "cloud": "AZURE",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\azure_activity_malicious.json",
+      "event_time": "2026-03-12T10:30:00Z",
+      "event_name": "Delete resource group",
+      "actor": "admin@contoso.com",
+      "source_ip": "203.0.113.100",
+      "region": "eastus",
+      "description": "Azure resource group deleted \u2014 potential data destruction.",
+      "recommendation": "Enable resource locks on critical resources.",
+      "mitre": [
+        "T1485"
+      ],
+      "compliance": [
+        "SOC2"
+      ],
+      "raw_event": {
+        "time": "2026-03-12T10:30:00Z",
+        "operationName": {
+          "value": "Delete resource group",
+          "localizedValue": "Delete resource group"
+        },
+        "caller": "admin@contoso.com",
+        "callerIpAddress": "203.0.113.100",
+        "properties": {}
+      }
+    },
+    {
+      "rule_id": "CDR-GCP-PE-001",
+      "name": "Service account created",
+      "tactic": "Persistence",
+      "severity": "HIGH",
+      "cloud": "GCP",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\gcp_audit_malicious.json",
+      "event_time": "2026-03-12T11:00:00Z",
+      "event_name": "google.iam.admin.v1.CreateServiceAccount",
+      "actor": "attacker@evil.com",
+      "source_ip": "203.0.113.200",
+      "region": "global",
+      "description": "New GCP service account created.",
+      "recommendation": "Verify service account creation. Apply least privilege roles.",
+      "mitre": [
+        "T1136.003"
+      ],
+      "compliance": [
+        "CIS-GCP",
+        "SOC2"
+      ],
+      "raw_event": {
+        "timestamp": "2026-03-12T11:00:00Z",
+        "resource": {
+          "type": "service_account",
+          "labels": {
+            "project_id": "my-project-123",
+            "email_id": "backdoor-sa@my-project-123.iam.gserviceaccount.com",
+            "location": "global"
+          }
+        },
+        "protoPayload": {
+          "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+          "serviceName": "iam.googleapis.com",
+          "methodName": "google.iam.admin.v1.CreateServiceAccount",
+          "authenticationInfo": {
+            "principalEmail": "attacker@evil.com"
+          },
+          "requestMetadata": {
+            "callerIp": "203.0.113.200",
+            "callerSuppliedUserAgent": "google-cloud-sdk"
+          },
+          "request": {
+            "account_id": "backdoor-sa",
+            "service_account": {
+              "display_name": "Backdoor Service Account"
+            }
+          }
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-GCP-PE-002",
+      "name": "Service account key created",
+      "tactic": "Persistence",
+      "severity": "HIGH",
+      "cloud": "GCP",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\gcp_audit_malicious.json",
+      "event_time": "2026-03-12T11:01:00Z",
+      "event_name": "google.iam.admin.v1.CreateServiceAccountKey",
+      "actor": "attacker@evil.com",
+      "source_ip": "203.0.113.200",
+      "region": "global",
+      "description": "Service account key created \u2014 enables persistent API access.",
+      "recommendation": "Avoid user-managed keys. Use Workload Identity Federation.",
+      "mitre": [
+        "T1098.001"
+      ],
+      "compliance": [
+        "CIS-GCP",
+        "NIST-800-53"
+      ],
+      "raw_event": {
+        "timestamp": "2026-03-12T11:01:00Z",
+        "resource": {
+          "type": "service_account",
+          "labels": {
+            "project_id": "my-project-123",
+            "email_id": "backdoor-sa@my-project-123.iam.gserviceaccount.com",
+            "location": "global"
+          }
+        },
+        "protoPayload": {
+          "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+          "serviceName": "iam.googleapis.com",
+          "methodName": "google.iam.admin.v1.CreateServiceAccountKey",
+          "authenticationInfo": {
+            "principalEmail": "attacker@evil.com"
+          },
+          "requestMetadata": {
+            "callerIp": "203.0.113.200",
+            "callerSuppliedUserAgent": "google-cloud-sdk"
+          },
+          "request": {
+            "name": "projects/my-project-123/serviceAccounts/backdoor-sa@my-project-123.iam.gserviceaccount.com"
+          }
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-GCP-DE-002",
+      "name": "Firewall rule deleted or modified",
+      "tactic": "Defense Evasion",
+      "severity": "HIGH",
+      "cloud": "GCP",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\gcp_audit_malicious.json",
+      "event_time": "2026-03-12T11:11:00Z",
+      "event_name": "v1.compute.firewalls.delete",
+      "actor": "attacker@evil.com",
+      "source_ip": "203.0.113.200",
+      "region": "global",
+      "description": "VPC firewall rule deleted or modified.",
+      "recommendation": "Verify firewall changes. Use Organisation Policies for guardrails.",
+      "mitre": [
+        "T1562.001"
+      ],
+      "compliance": [
+        "CIS-GCP",
+        "NIST-800-53"
+      ],
+      "raw_event": {
+        "timestamp": "2026-03-12T11:11:00Z",
+        "resource": {
+          "type": "gce_firewall_rule",
+          "labels": {
+            "project_id": "my-project-123",
+            "firewall_rule_id": "1234567890",
+            "location": "global"
+          }
+        },
+        "protoPayload": {
+          "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+          "serviceName": "compute.googleapis.com",
+          "methodName": "v1.compute.firewalls.delete",
+          "authenticationInfo": {
+            "principalEmail": "attacker@evil.com"
+          },
+          "requestMetadata": {
+            "callerIp": "203.0.113.200",
+            "callerSuppliedUserAgent": "google-cloud-sdk"
+          },
+          "request": {
+            "firewall": "deny-all-ingress"
+          }
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-GCP-IM-001",
+      "name": "Project or resource deleted",
+      "tactic": "Impact",
+      "severity": "HIGH",
+      "cloud": "GCP",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\gcp_audit_malicious.json",
+      "event_time": "2026-03-12T11:25:00Z",
+      "event_name": "v1.compute.instances.delete",
+      "actor": "attacker@evil.com",
+      "source_ip": "203.0.113.200",
+      "region": "us-central1-a",
+      "description": "GCP project or compute instance deleted.",
+      "recommendation": "Enable liens on critical projects. Verify deletion was authorised.",
+      "mitre": [
+        "T1485"
+      ],
+      "compliance": [
+        "SOC2"
+      ],
+      "raw_event": {
+        "timestamp": "2026-03-12T11:25:00Z",
+        "resource": {
+          "type": "gce_instance",
+          "labels": {
+            "project_id": "my-project-123",
+            "instance_id": "1234567890123456",
+            "zone": "us-central1-a",
+            "location": "us-central1-a"
+          }
+        },
+        "protoPayload": {
+          "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+          "serviceName": "compute.googleapis.com",
+          "methodName": "v1.compute.instances.delete",
+          "authenticationInfo": {
+            "principalEmail": "attacker@evil.com"
+          },
+          "requestMetadata": {
+            "callerIp": "203.0.113.200",
+            "callerSuppliedUserAgent": "google-cloud-sdk"
+          },
+          "request": {
+            "instance": "production-web-server"
+          }
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AWS-IA-003",
+      "name": "Console login failure \u2014 possible brute force",
+      "tactic": "Initial Access",
+      "severity": "MEDIUM",
+      "cloud": "AWS",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\cloudtrail_malicious.json",
+      "event_time": "2026-03-12T08:22:00Z",
+      "event_name": "ConsoleLogin",
+      "actor": "arn:aws:iam::123456789012:user/attacker",
+      "source_ip": "192.0.2.99",
+      "region": "us-east-1",
+      "description": "Failed console login attempt detected. Multiple failures may indicate brute force.",
+      "recommendation": "Investigate source IP. Enable account lockout and MFA.",
+      "mitre": [
+        "T1110.001"
+      ],
+      "compliance": [
+        "NIST-800-53"
+      ],
+      "raw_event": {
+        "userIdentity": {
+          "type": "IAMUser",
+          "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+          "arn": "arn:aws:iam::123456789012:user/attacker",
+          "accountId": "123456789012",
+          "userName": "attacker"
+        },
+        "eventTime": "2026-03-12T08:22:00Z",
+        "eventName": "ConsoleLogin",
+        "awsRegion": "us-east-1",
+        "sourceIPAddress": "192.0.2.99",
+        "responseElements": {
+          "ConsoleLogin": "Failure"
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AWS-PR-004",
+      "name": "STS AssumeRole to cross-account role",
+      "tactic": "Privilege Escalation",
+      "severity": "MEDIUM",
+      "cloud": "AWS",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\cloudtrail_malicious.json",
+      "event_time": "2026-03-12T08:36:00Z",
+      "event_name": "AssumeRole",
+      "actor": "arn:aws:iam::123456789012:user/attacker",
+      "source_ip": "203.0.113.50",
+      "region": "us-east-1",
+      "description": "Cross-account role assumption detected.",
+      "recommendation": "Verify cross-account access is authorised and uses external ID.",
+      "mitre": [
+        "T1199"
+      ],
+      "compliance": [
+        "NIST-800-53",
+        "SOC2"
+      ],
+      "raw_event": {
+        "userIdentity": {
+          "type": "IAMUser",
+          "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+          "arn": "arn:aws:iam::123456789012:user/attacker",
+          "accountId": "123456789012",
+          "userName": "attacker"
+        },
+        "eventTime": "2026-03-12T08:36:00Z",
+        "eventName": "AssumeRole",
+        "awsRegion": "us-east-1",
+        "sourceIPAddress": "203.0.113.50",
+        "requestParameters": {
+          "roleArn": "arn:aws:iam::999888777666:role/external-admin",
+          "roleSessionName": "cross-account-session"
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AWS-CA-001",
+      "name": "Secrets Manager secret accessed",
+      "tactic": "Credential Access",
+      "severity": "MEDIUM",
+      "cloud": "AWS",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\cloudtrail_malicious.json",
+      "event_time": "2026-03-12T08:48:00Z",
+      "event_name": "GetSecretValue",
+      "actor": "arn:aws:iam::123456789012:user/attacker",
+      "source_ip": "203.0.113.50",
+      "region": "us-east-1",
+      "description": "Secret retrieved from Secrets Manager.",
+      "recommendation": "Verify the accessor is authorised. Enable secret rotation.",
+      "mitre": [
+        "T1552"
+      ],
+      "compliance": [
+        "NIST-800-53",
+        "PCI-DSS"
+      ],
+      "raw_event": {
+        "userIdentity": {
+          "type": "IAMUser",
+          "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+          "arn": "arn:aws:iam::123456789012:user/attacker",
+          "accountId": "123456789012",
+          "userName": "attacker"
+        },
+        "eventTime": "2026-03-12T08:48:00Z",
+        "eventName": "GetSecretValue",
+        "awsRegion": "us-east-1",
+        "sourceIPAddress": "203.0.113.50",
+        "requestParameters": {
+          "secretId": "prod/database/admin-password"
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AWS-CA-002",
+      "name": "SSM Parameter Store sensitive parameter accessed",
+      "tactic": "Credential Access",
+      "severity": "MEDIUM",
+      "cloud": "AWS",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\cloudtrail_malicious.json",
+      "event_time": "2026-03-12T08:49:00Z",
+      "event_name": "GetParameter",
+      "actor": "arn:aws:iam::123456789012:user/attacker",
+      "source_ip": "203.0.113.50",
+      "region": "us-east-1",
+      "description": "Parameter Store parameter accessed \u2014 may contain secrets.",
+      "recommendation": "Use SecureString type and restrict access via IAM policies.",
+      "mitre": [
+        "T1552"
+      ],
+      "compliance": [
+        "NIST-800-53"
+      ],
+      "raw_event": {
+        "userIdentity": {
+          "type": "IAMUser",
+          "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+          "arn": "arn:aws:iam::123456789012:user/attacker",
+          "accountId": "123456789012",
+          "userName": "attacker"
+        },
+        "eventTime": "2026-03-12T08:49:00Z",
+        "eventName": "GetParameter",
+        "awsRegion": "us-east-1",
+        "sourceIPAddress": "203.0.113.50",
+        "requestParameters": {
+          "name": "/prod/api-secret-key",
+          "withDecryption": true
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AWS-DI-002",
+      "name": "S3 bucket enumeration",
+      "tactic": "Discovery",
+      "severity": "MEDIUM",
+      "cloud": "AWS",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\cloudtrail_malicious.json",
+      "event_time": "2026-03-12T08:52:00Z",
+      "event_name": "ListBuckets",
+      "actor": "arn:aws:iam::123456789012:user/attacker",
+      "source_ip": "203.0.113.50",
+      "region": "us-east-1",
+      "description": "S3 bucket enumeration detected \u2014 attacker mapping storage surface.",
+      "recommendation": "Review if the caller has legitimate need to list/inspect bucket configurations.",
+      "mitre": [
+        "T1619"
+      ],
+      "compliance": [],
+      "raw_event": {
+        "userIdentity": {
+          "type": "IAMUser",
+          "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+          "arn": "arn:aws:iam::123456789012:user/attacker",
+          "accountId": "123456789012",
+          "userName": "attacker"
+        },
+        "eventTime": "2026-03-12T08:52:00Z",
+        "eventName": "ListBuckets",
+        "awsRegion": "us-east-1",
+        "sourceIPAddress": "203.0.113.50"
+      }
+    },
+    {
+      "rule_id": "CDR-AWS-DI-002",
+      "name": "S3 bucket enumeration",
+      "tactic": "Discovery",
+      "severity": "MEDIUM",
+      "cloud": "AWS",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\cloudtrail_malicious.json",
+      "event_time": "2026-03-12T08:54:00Z",
+      "event_name": "GetBucketAcl",
+      "actor": "arn:aws:iam::123456789012:user/attacker",
+      "source_ip": "203.0.113.50",
+      "region": "us-east-1",
+      "description": "S3 bucket enumeration detected \u2014 attacker mapping storage surface.",
+      "recommendation": "Review if the caller has legitimate need to list/inspect bucket configurations.",
+      "mitre": [
+        "T1619"
+      ],
+      "compliance": [],
+      "raw_event": {
+        "userIdentity": {
+          "type": "IAMUser",
+          "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+          "arn": "arn:aws:iam::123456789012:user/attacker",
+          "accountId": "123456789012",
+          "userName": "attacker"
+        },
+        "eventTime": "2026-03-12T08:54:00Z",
+        "eventName": "GetBucketAcl",
+        "awsRegion": "us-east-1",
+        "sourceIPAddress": "203.0.113.50",
+        "requestParameters": {
+          "bucketName": "sensitive-data-bucket"
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AWS-NET-002",
+      "name": "Security group rule deleted",
+      "tactic": "Network",
+      "severity": "MEDIUM",
+      "cloud": "AWS",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\cloudtrail_malicious.json",
+      "event_time": "2026-03-12T09:06:00Z",
+      "event_name": "RevokeSecurityGroupIngress",
+      "actor": "arn:aws:iam::123456789012:user/attacker",
+      "source_ip": "203.0.113.50",
+      "region": "us-east-1",
+      "description": "Security group rule removed \u2014 may weaken network controls.",
+      "recommendation": "Verify the rule removal was intentional and does not weaken security posture.",
+      "mitre": [
+        "T1562.001"
+      ],
+      "compliance": [
+        "NIST-800-53"
+      ],
+      "raw_event": {
+        "userIdentity": {
+          "type": "IAMUser",
+          "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+          "arn": "arn:aws:iam::123456789012:user/attacker",
+          "accountId": "123456789012",
+          "userName": "attacker"
+        },
+        "eventTime": "2026-03-12T09:06:00Z",
+        "eventName": "RevokeSecurityGroupIngress",
+        "awsRegion": "us-east-1",
+        "sourceIPAddress": "203.0.113.50",
+        "requestParameters": {
+          "groupId": "sg-0123456789abcdef0"
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AWS-IA-004",
+      "name": "API call from unusual region",
+      "tactic": "Initial Access",
+      "severity": "MEDIUM",
+      "cloud": "AWS",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\cloudtrail_malicious.json",
+      "event_time": "2026-03-12T09:07:00Z",
+      "event_name": "CreateVpc",
+      "actor": "arn:aws:iam::123456789012:user/attacker",
+      "source_ip": "203.0.113.50",
+      "region": "af-south-1",
+      "description": "API call made from an unusual or unused AWS region.",
+      "recommendation": "Investigate if activity is legitimate. Use SCPs to restrict unused regions.",
+      "mitre": [
+        "T1535"
+      ],
+      "compliance": [
+        "CIS-AWS"
+      ],
+      "raw_event": {
+        "userIdentity": {
+          "type": "IAMUser",
+          "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+          "arn": "arn:aws:iam::123456789012:user/attacker",
+          "accountId": "123456789012",
+          "userName": "attacker"
+        },
+        "eventTime": "2026-03-12T09:07:00Z",
+        "eventName": "CreateVpc",
+        "awsRegion": "af-south-1",
+        "sourceIPAddress": "203.0.113.50",
+        "requestParameters": {
+          "cidrBlock": "10.99.0.0/16"
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AWS-NET-003",
+      "name": "VPC or subnet modified",
+      "tactic": "Network",
+      "severity": "MEDIUM",
+      "cloud": "AWS",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\cloudtrail_malicious.json",
+      "event_time": "2026-03-12T09:07:00Z",
+      "event_name": "CreateVpc",
+      "actor": "arn:aws:iam::123456789012:user/attacker",
+      "source_ip": "203.0.113.50",
+      "region": "af-south-1",
+      "description": "VPC or subnet infrastructure modified.",
+      "recommendation": "Verify network changes are authorised and follow architecture standards.",
+      "mitre": [
+        "T1578"
+      ],
+      "compliance": [
+        "NIST-800-53"
+      ],
+      "raw_event": {
+        "userIdentity": {
+          "type": "IAMUser",
+          "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+          "arn": "arn:aws:iam::123456789012:user/attacker",
+          "accountId": "123456789012",
+          "userName": "attacker"
+        },
+        "eventTime": "2026-03-12T09:07:00Z",
+        "eventName": "CreateVpc",
+        "awsRegion": "af-south-1",
+        "sourceIPAddress": "203.0.113.50",
+        "requestParameters": {
+          "cidrBlock": "10.99.0.0/16"
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AWS-PE-004",
+      "name": "Lambda function created or updated",
+      "tactic": "Persistence",
+      "severity": "MEDIUM",
+      "cloud": "AWS",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\cloudtrail_malicious.json",
+      "event_time": "2026-03-12T09:16:00Z",
+      "event_name": "CreateFunction20150331",
+      "actor": "arn:aws:iam::123456789012:user/attacker",
+      "source_ip": "203.0.113.50",
+      "region": "us-east-1",
+      "description": "Lambda function created or modified \u2014 could be used as a backdoor or for data exfiltration.",
+      "recommendation": "Review the function code and IAM role for excessive permissions.",
+      "mitre": [
+        "T1525"
+      ],
+      "compliance": [
+        "SOC2"
+      ],
+      "raw_event": {
+        "userIdentity": {
+          "type": "IAMUser",
+          "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+          "arn": "arn:aws:iam::123456789012:user/attacker",
+          "accountId": "123456789012",
+          "userName": "attacker"
+        },
+        "eventTime": "2026-03-12T09:16:00Z",
+        "eventName": "CreateFunction20150331",
+        "awsRegion": "us-east-1",
+        "sourceIPAddress": "203.0.113.50",
+        "requestParameters": {
+          "functionName": "data-exfil-function",
+          "runtime": "python3.12"
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AWS-PE-005",
+      "name": "EC2 key pair created or imported",
+      "tactic": "Persistence",
+      "severity": "MEDIUM",
+      "cloud": "AWS",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\cloudtrail_malicious.json",
+      "event_time": "2026-03-12T09:17:00Z",
+      "event_name": "CreateKeyPair",
+      "actor": "arn:aws:iam::123456789012:user/attacker",
+      "source_ip": "203.0.113.50",
+      "region": "us-east-1",
+      "description": "SSH key pair created or imported \u2014 enables SSH access to EC2 instances.",
+      "recommendation": "Verify key pair creation. Use Session Manager instead of SSH keys.",
+      "mitre": [
+        "T1098.001"
+      ],
+      "compliance": [
+        "NIST-800-53"
+      ],
+      "raw_event": {
+        "userIdentity": {
+          "type": "IAMUser",
+          "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+          "arn": "arn:aws:iam::123456789012:user/attacker",
+          "accountId": "123456789012",
+          "userName": "attacker"
+        },
+        "eventTime": "2026-03-12T09:17:00Z",
+        "eventName": "CreateKeyPair",
+        "awsRegion": "us-east-1",
+        "sourceIPAddress": "203.0.113.50",
+        "requestParameters": {
+          "keyName": "backdoor-key"
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AZ-IA-002",
+      "name": "Multiple failed sign-in attempts",
+      "tactic": "Initial Access",
+      "severity": "MEDIUM",
+      "cloud": "AZURE",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\azure_activity_malicious.json",
+      "event_time": "2026-03-12T10:01:00Z",
+      "event_name": "Sign-in activity",
+      "actor": "bruteforcer@evil.com",
+      "source_ip": "198.51.100.44",
+      "region": "CN",
+      "description": "Multiple failed sign-in attempts \u2014 possible brute force or credential stuffing.",
+      "recommendation": "Enable smart lockout. Enforce MFA and Conditional Access.",
+      "mitre": [
+        "T1110"
+      ],
+      "compliance": [
+        "CIS-AZURE",
+        "NIST-800-53"
+      ],
+      "raw_event": {
+        "time": "2026-03-12T10:01:00Z",
+        "operationName": {
+          "value": "Sign-in activity",
+          "localizedValue": "Sign-in activity"
+        },
+        "caller": "bruteforcer@evil.com",
+        "callerIpAddress": "198.51.100.44",
+        "properties": {
+          "userPrincipalName": "cfo@contoso.com",
+          "ipAddress": "198.51.100.44",
+          "riskLevelDuringSignIn": "none",
+          "status": {
+            "errorCode": 50126,
+            "failureReason": "Invalid username or password"
+          },
+          "authenticationDetails": []
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-GCP-PR-002",
+      "name": "Custom IAM role created",
+      "tactic": "Privilege Escalation",
+      "severity": "MEDIUM",
+      "cloud": "GCP",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\gcp_audit_malicious.json",
+      "event_time": "2026-03-12T11:06:00Z",
+      "event_name": "google.iam.admin.v1.CreateRole",
+      "actor": "attacker@evil.com",
+      "source_ip": "203.0.113.200",
+      "region": "global",
+      "description": "Custom IAM role created \u2014 verify it follows least privilege.",
+      "recommendation": "Review custom role permissions for overly broad access.",
+      "mitre": [
+        "T1098.003"
+      ],
+      "compliance": [
+        "CIS-GCP"
+      ],
+      "raw_event": {
+        "timestamp": "2026-03-12T11:06:00Z",
+        "resource": {
+          "type": "iam_role",
+          "labels": {
+            "project_id": "my-project-123",
+            "location": "global"
+          }
+        },
+        "protoPayload": {
+          "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+          "serviceName": "iam.googleapis.com",
+          "methodName": "google.iam.admin.v1.CreateRole",
+          "authenticationInfo": {
+            "principalEmail": "attacker@evil.com"
+          },
+          "requestMetadata": {
+            "callerIp": "203.0.113.200",
+            "callerSuppliedUserAgent": "google-cloud-sdk"
+          },
+          "request": {
+            "role_id": "customSuperAdmin",
+            "role": {
+              "title": "Custom Super Admin",
+              "includedPermissions": [
+                "*"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "rule_id": "CDR-AWS-DI-001",
+      "name": "Reconnaissance API calls detected",
+      "tactic": "Discovery",
+      "severity": "LOW",
+      "cloud": "AWS",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\cloudtrail_malicious.json",
+      "event_time": "2026-03-12T08:52:00Z",
+      "event_name": "ListBuckets",
+      "actor": "arn:aws:iam::123456789012:user/attacker",
+      "source_ip": "203.0.113.50",
+      "region": "us-east-1",
+      "description": "Reconnaissance/enumeration API calls detected.",
+      "recommendation": "Verify if the caller has a legitimate need for this discovery.",
+      "mitre": [
+        "T1580",
+        "T1526"
+      ],
+      "compliance": [],
+      "raw_event": {
+        "userIdentity": {
+          "type": "IAMUser",
+          "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+          "arn": "arn:aws:iam::123456789012:user/attacker",
+          "accountId": "123456789012",
+          "userName": "attacker"
+        },
+        "eventTime": "2026-03-12T08:52:00Z",
+        "eventName": "ListBuckets",
+        "awsRegion": "us-east-1",
+        "sourceIPAddress": "203.0.113.50"
+      }
+    },
+    {
+      "rule_id": "CDR-AWS-DI-001",
+      "name": "Reconnaissance API calls detected",
+      "tactic": "Discovery",
+      "severity": "LOW",
+      "cloud": "AWS",
+      "source_file": "C:\\KRISHNENDU\\PROJECTS\\Cloud-Detection-Response\\Cloud-Detection-Response\\tests\\samples\\cloudtrail_malicious.json",
+      "event_time": "2026-03-12T08:53:00Z",
+      "event_name": "DescribeInstances",
+      "actor": "arn:aws:iam::123456789012:user/attacker",
+      "source_ip": "203.0.113.50",
+      "region": "us-east-1",
+      "description": "Reconnaissance/enumeration API calls detected.",
+      "recommendation": "Verify if the caller has a legitimate need for this discovery.",
+      "mitre": [
+        "T1580",
+        "T1526"
+      ],
+      "compliance": [],
+      "raw_event": {
+        "userIdentity": {
+          "type": "IAMUser",
+          "principalId": "AIDACKCEVSQ6C2EXAMPLE",
+          "arn": "arn:aws:iam::123456789012:user/attacker",
+          "accountId": "123456789012",
+          "userName": "attacker"
+        },
+        "eventTime": "2026-03-12T08:53:00Z",
+        "eventName": "DescribeInstances",
+        "awsRegion": "us-east-1",
+        "sourceIPAddress": "203.0.113.50"
+      }
+    }
+  ]
+}

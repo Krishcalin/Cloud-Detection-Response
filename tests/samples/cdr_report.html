@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CDR Threat Report</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#0a0a1a;color:#e0e0e0}
+.header{background:linear-gradient(135deg,#dc2626,#991b1b,#7f1d1d);padding:32px;text-align:center}
+.header h1{font-size:28px;font-weight:700;color:#fff}.header p{color:#fca5a5;margin-top:6px}
+.meta{display:flex;justify-content:center;gap:32px;margin-top:12px;color:#fecaca;font-size:13px}
+.cards{display:flex;justify-content:center;gap:16px;padding:24px;flex-wrap:wrap}
+.card{background:#1a1a2e;border-radius:8px;padding:20px 32px;text-align:center;min-width:120px}
+.card-count{font-size:32px;font-weight:700;color:#fff}.card-label{font-size:13px;color:#a4b0be;margin-top:4px}
+.tactics{background:#1a1a2e;margin:0 24px 16px;padding:16px 24px;border-radius:8px;border-left:3px solid #dc2626}
+.tac-item{display:inline-flex;align-items:center;gap:6px;margin:4px 8px 4px 0;background:#2a2a3e;padding:4px 12px;border-radius:4px;font-size:13px}
+.tac-count{background:#dc2626;color:#fff;padding:1px 6px;border-radius:3px;font-size:11px;font-weight:700}
+.container{padding:0 24px 24px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{background:#1a1a2e;padding:10px 6px;text-align:left;position:sticky;top:0}
+td{padding:6px;border-bottom:1px solid #2a2a3e;vertical-align:top}
+tr:hover{background:#1e1e30}
+.sev{padding:2px 8px;border-radius:4px;color:#fff;font-weight:600;font-size:11px}
+.cloud{padding:2px 8px;border-radius:4px;color:#fff;font-weight:600;font-size:11px}
+.tag{display:inline-block;padding:1px 6px;border-radius:3px;font-size:10px;margin:1px}
+.tag.mitre{background:#2a2a5e;color:#818cf8}.tag.comp{background:#1e3a2e;color:#6ee7b7}
+code{background:#1a1a2e;padding:2px 4px;border-radius:3px;font-size:11px;word-break:break-all}
+.filters{padding:8px 24px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.filters label{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:4px}
+</style></head><body>
+<div class="header"><h1>Cloud Detection & Response — Threat Report</h1>
+<p>Multi-Cloud Audit Log Analysis &amp; Threat Detection</p>
+<div class="meta"><span>Version 1.0.0</span><span>2026-03-31 02:21:52 UTC</span>
+<span>Files: 3</span><span>Events: 62</span>
+<span>Threats: 66</span></div></div>
+<div class="cards"><div class="card" style="border-top:3px solid #ff4757"><div class="card-count">23</div><div class="card-label">CRITICAL</div></div><div class="card" style="border-top:3px solid #ff6b81"><div class="card-count">28</div><div class="card-label">HIGH</div></div><div class="card" style="border-top:3px solid #ffa502"><div class="card-count">13</div><div class="card-label">MEDIUM</div></div><div class="card" style="border-top:3px solid #1e90ff"><div class="card-count">2</div><div class="card-label">LOW</div></div><div class="card" style="border-top:3px solid #a4b0be"><div class="card-count">0</div><div class="card-label">INFO</div></div></div>
+<div class='tactics'><strong>MITRE ATT&CK Tactics</strong><br><br><div class='tac-item'><span class='tac-name'>Defense Evasion</span><span class='tac-count'>13</span></div><div class='tac-item'><span class='tac-name'>Persistence</span><span class='tac-count'>11</span></div><div class='tac-item'><span class='tac-name'>Initial Access</span><span class='tac-count'>9</span></div><div class='tac-item'><span class='tac-name'>Impact</span><span class='tac-count'>9</span></div><div class='tac-item'><span class='tac-name'>Privilege Escalation</span><span class='tac-count'>8</span></div><div class='tac-item'><span class='tac-name'>Network</span><span class='tac-count'>5</span></div><div class='tac-item'><span class='tac-name'>Discovery</span><span class='tac-count'>4</span></div><div class='tac-item'><span class='tac-name'>Exfiltration</span><span class='tac-count'>4</span></div><div class='tac-item'><span class='tac-name'>Credential Access</span><span class='tac-count'>3</span></div></div>
+<div class="filters"><strong>Filter:</strong>
+<label><input type="checkbox" checked onchange="filterSev()" class="sev-chk" value="CRITICAL"> CRITICAL</label><label><input type="checkbox" checked onchange="filterSev()" class="sev-chk" value="HIGH"> HIGH</label><label><input type="checkbox" checked onchange="filterSev()" class="sev-chk" value="MEDIUM"> MEDIUM</label><label><input type="checkbox" checked onchange="filterSev()" class="sev-chk" value="LOW"> LOW</label><label><input type="checkbox" checked onchange="filterSev()" class="sev-chk" value="INFO"> INFO</label></div>
+<div class="container"><table><thead><tr>
+<th>#</th><th>Rule</th><th>Severity</th><th>Cloud</th><th>Tactic</th><th>Threat</th>
+<th>Time</th><th>Event</th><th>Actor</th><th>Source IP</th><th>Region</th>
+<th>MITRE</th><th>Compliance</th><th>Recommendation</th>
+</tr></thead><tbody>
+            <tr class="sev-CRITICAL">
+              <td>1</td><td>CDR-AWS-IA-001</td>
+              <td><span class="sev" style="background:#ff4757">CRITICAL</span></td>
+              <td><span class="cloud" style="background:#ff9900">AWS</span></td>
+              <td>Initial Access</td><td>Root account login detected</td>
+              <td><code>2026-03-12T08:15:00Z</code></td><td><code>ConsoleLogin</code></td>
+              <td><code>arn:aws:iam::123456789012:root</code></td><td><code>203.0.113.50</code></td>
+              <td>us-east-1</td><td><span class="tag mitre">T1078.004</span></td><td><span class="tag comp">CIS AWS Foundations Benchmark</span><span class="tag comp">NIST 800-53</span></td>
+              <td>Disable root account console access. Use IAM users with MFA instead.</td>
+            </tr>
+            <tr class="sev-CRITICAL">
+              <td>2</td><td>CDR-AWS-PR-001</td>
+              <td><span class="sev" style="background:#ff4757">CRITICAL</span></td>
+              <td><span class="cloud" style="background:#ff9900">AWS</span></td>
+              <td>Privilege Escalation</td><td>AdministratorAccess policy attached</td>
+              <td><code>2026-03-12T08:33:00Z</code></td><td><code>AttachUserPolicy</code></td>
+              <td><code>arn:aws:iam::123456789012:user/attacker</code></td><td><code>203.0.113.50</code></td>
+              <td>us-east-1</td><td><span class="tag mitre">T1098.003</span></td><td><span class="tag comp">CIS AWS Foundations Benchmark</span><span class="tag comp">NIST 800-53</span><span class="tag comp">SOC 2 Type II</span></td>
+              <td>Follow least privilege. Use scoped policies instead of AdministratorAccess.</td>
+            </tr>
+            <tr class="sev-CRITICAL">
+              <td>3</td><td>CDR-AWS-DE-001</td>
+              <td><span class="sev" style="background:#ff4757">CRITICAL</span></td>
+              <td><span class="cloud" style="background:#ff9900">AWS</span></td>
+              <td>Defense Evasion</td><td>CloudTrail logging stopped</td>
+              <td><code>2026-03-12T08:40:00Z</code></td><td><code>StopLogging</code></td>
+              <td><code>arn:aws:iam::123456789012:user/attacker</code></td><td><code>203.0.113.50</code></td>
+              <td>us-east-1</td><td><span class="tag mitre">T1562.008</span></td><td><span class="tag comp">CIS AWS Foundations Benchmark</span><span class="tag comp">NIST 800-53</span><span class="tag comp">SOC 2 Type II</span><span class="tag comp">PCI-DSS v4.0</span></td>
+              <td>Re-enable CloudTrail immediately. Investigate who stopped it and why.</td>
+            </tr>
+            <tr class="sev-CRITICAL">
+              <td>4</td><td>CDR-AWS-DE-002</td>
+              <td><span class="sev" style="background:#ff4757">CRITICAL</span></td>
+              <td><span class="cloud" style="background:#ff9900">AWS</span></td>
+              <td>Defense Evasion</td><td>CloudTrail trail deleted</td>
+              <td><code>2026-03-12T08:41:00Z</code></td><td><code>DeleteTrail</code></td>
+              <td><code>arn:aws:iam::123456789012:user/attacker</code></td><td><code>203.0.113.50</code></td>
+              <td>us-east-1</td><td><span class="tag mitre">T1562.008</span></td><td><span class="tag comp">CIS AWS Foundations Benchmark</span><span class="tag comp">NIST 800-53</span><span class="tag comp">SOC 2 Type II</span></td>
+              <td>Recreate trail immediately. Investigate the actor and timeline.</td>
+            </tr>
+            <tr class="sev-CRITICAL">
+              <td>5</td><td>CDR-AWS-DE-004</td>
+              <td><span class="sev" style="background:#ff4757">CRITICAL</span></td>
+              <td><span class="cloud" style="background:#ff9900">AWS</span></td>
+              <td>Defense Evasion</td><td>GuardDuty detector disabled or deleted</td>
+              <td><code>2026-03-12T08:43:00Z</code></td><td><code>DeleteDetector</code></td>
+              <td><code>arn:aws:iam::123456789012:user/attacker</code></td><td><code>203.0.113.50</code></td>
+              <td>us-east-1</td><td><span class="tag mitre">T1562.001</span></td><td><span class="tag comp">CIS AWS Foundations Benchmark</span><span class="tag comp">NIST 800-53</span></td>
+              <td>Re-enable GuardDuty immediately. Investigate who disabled it.</td>
+            </tr>
+            <tr class="sev-CRITICAL">
+              <td>6</td><td>CDR-AWS-DE-006</td>
+              <td><span class="sev" style="background:#ff4757">CRITICAL</span></td>
+              <td><span class="cloud" style="background:#ff9900">AWS</span></td>
+              <td>Defense Evasion</td><td>Config recorder stopped or deleted</td>
+              <td><code>2026-03-12T08:45:00Z</code></td><td><code>StopConfigurationRecorder</code></td>
+              <td><code>arn:aws:iam::123456789012:user/attacker</code></td><td><code>203.0.113.50</code></td>
+              <td>us-east-1</td><td><span class="tag mitre">T1562.001</span></td><td><span class="tag comp">CIS AWS Foundations Benchmark</span><span class="tag comp">NIST 800-53</span></td>
+              <td>Re-enable AWS Config. Investigate the actor.</td>
+            </tr>
+            <tr class="sev-CRITICAL">
+              <td>7</td><td>CDR-AWS-EX-001</td>
+              <td><span class="sev" style="background:#ff4757">CRITICAL</span></td>
+              <td><span class="cloud" style="background:#ff9900">AWS</span></td>
+              <td>Exfiltration</td><td>S3 bucket policy made public</td>
+              <td><code>2026-03-12T09:00:00Z</code></td><td><code>PutBucketAcl</code></td>
+              <td><code>arn:aws:iam::123456789012:user/attacker</code></td><td><code>203.0.113.50</code></td>
+              <td>us-east-1</td><td><span class="tag mitre">T1530</span></td><td><span class="tag comp">CIS AWS Foundations Benchmark</span><span class="tag comp">NIST 800-53</span><span class="tag comp">PCI-DSS v4.0</span></td>
+              <td>Remove public access immediately. Enable S3 Block Public Access.</td>
+            </tr>
+            <tr class="sev-CRITICAL">
+              <td>8</td><td>CDR-AWS-EX-002</td>
+              <td><span class="sev" style="background:#ff4757">CRITICAL</span></td>
+              <td><span class="cloud" style="background:#ff9900">AWS</span></td>
+              <td>Exfiltration</td><td>EBS snapshot shared publicly</td>
+              <td><code>2026-03-12T09:01:00Z</code></td><td><code>ModifySnapshotAttribute</code></td>
+              <td><code>arn:aws:iam::123456789012:user/attacker</code></td><td><code>203.0.113.50</code></td>
+              <td>us-east-1</td><td><span class="tag mitre">T1537</span></td><td><span class="tag comp">CIS AWS Foundations Benchmark</span><span class="tag comp">NIST 800-53</span></td>
+              <td>Remove public sharing. Review snapshot contents for sensitive data.</td>
+            </tr>
+            <tr class="sev-CRITICAL">
+              <td>9</td><td>CDR-AWS-EX-003</td>
+              <td><span class="sev" style="background:#ff4757">CRITICAL</span></td>
+              <td><span class="cloud" style="background:#ff9900">AWS</span></td>
+              <td>Exfiltration</td><td>RDS snapshot shared externally</td>
+              <td><code>2026-03-12T09:02:00Z</code></td><td><code>ModifyDBSnapshotAttribute</code></td>
+              <td><code>arn:aws:iam::123456789012:user/attacker</code></td><td><code>203.0.113.50</code></td>
+              <td>us-east-1</td><td><span class="tag mitre">T1537</span></td><td><span class="tag comp">NIST 800-53</span><span class="tag comp">PCI-DSS v4.0</span></td>
+              <td>Verify the target account. Restrict snapshot sharing.</td>
+            </tr>
+            <tr class="sev-CRITICAL">
+              <td>10</td><td>CDR-AWS-NET-001</td>
+              <td><span class="sev" style="background:#ff4757">CRITICAL</span></td>
+              <td><span class="cloud" style="background:#ff9900">AWS</span></td>
+              <td>Network</td><td>Security group opened to 0.0.0.0/0</td>
+              <td><code>2026-03-12T09:05:00Z</code></td><td><code>AuthorizeSecurityGroupIngress</code></td>
+              <td><code>arn:aws:iam::123456789012:user/attacker</code></td><td><code>203.0.113.50</code></td>
+              <td>us-east-1</td><td><span class="tag mitre">T1190</span></td><td><span class="tag comp">CIS AWS Foundations Benchmark</span><span class="tag comp">NIST 800-53</span><span class="tag comp">PCI-DSS v4.0</span></td>
+              <td>Restrict security group rules to specific CIDR ranges.</td>
+            </tr>
+            <tr class="sev-CRITICAL">
+              <td>11</td><td>CDR-AWS-IM-002</td>
+              <td><span class="sev" style="background:#ff4757">CRITICAL</span></td>
+              <td><span class="cloud" style="background:#ff9900">AWS</span></td>
+              <td>Impact</td><td>RDS instance or cluster deleted</td>
+              <td><code>2026-03-12T09:12:00Z</code></td><td><code>DeleteDBInstance</code></td>
+              <td><code>arn:aws:iam::123456789012:user/attacker</code></td><td><code>203.0.113.50</code></td>
+              <td>us-east-1</td><td><span class="tag mitre">T1485</span></td><td><span class="tag comp">SOC 2 Type II</span><span class="tag comp">PCI-DSS v4.0</span></td>
+              <td>Enable deletion protection on production databases. Verify final snapshots.</td>
+            </tr>
+            <tr class="sev-CRITICAL">
+              <td>12</td><td>CDR-AWS-IM-005</td>
+              <td><span class="sev" style="background:#ff4757">CRITICAL</span></td>
+              <td><span class="cloud" style="background:#ff9900">AWS</span></td>
+              <td>Impact</td><td>KMS key scheduled for deletion</td>
+              <td><code>2026-03-12T09:15:00Z</code></td><td><code>ScheduleKeyDeletion</code></td>
+              <td><code>arn:aws:iam::123456789012:user/attacker</code></td><td><code>203.0.113.50</code></td>
+              <td>us-east-1</td><td><span class="tag mitre">T1485</span></td><td><span class="tag comp">NIST 800-53</span><span class="tag comp">PCI-DSS v4.0</span></td>
+              <td>Cancel key deletion if unauthorised. Review key usage before deletion.</td>
+            </tr>
+            <tr class="sev-CRITICAL">
+              <td>13</td><td>CDR-AZ-PR-001</td>
+              <td><span class="sev" style="background:#ff4757">CRITICAL</span></td>
+              <td><span class="cloud" style="background:#0078d4">AZURE</span></td>
+              <td>Privilege Escalation</td><td>Global Administrator role assigned</td>
+              <td><code>2026-03-12T10:15:00Z</code></td><td><code>Add member to role</code></td>
+              <td><code>admin@contoso.com</code></td><td><code>203.0.113.100</code></td>
+              <td>US</td><td><span class="tag mitre">T1098.003</span></td><td><span class="tag comp">CIS Azure Foundations Benchmark</span><span class="tag comp">NIST 800-53</span><span class="tag comp">SOC 2 Type II</span></td>
+              <td>Limit Global Admins to 2-4. Use PIM with time-bound assignments.</td>
+            </tr>
+            <tr class="sev-CRITICAL">
+              <td>14</td><td>CDR-AZ-DE-001</td>
+              <td><span class="sev" style="background:#ff4757">CRITICAL</span></td>
+              <td><span class="cloud" style="background:#0078d4">AZURE</span></td>
+              <td>Defense Evasion</td><td>Conditional Access policy disabled or deleted</td>
+              <td><code>2026-03-12T10:20:00Z</code></td><td><code>Update conditional access policy</code></td>
+              <td><code>admin@contoso.com</code></td><td><code>203.0.113.100</code></td>
+              <td>US</td><td><span class="tag mitre">T1562.001</span></td><td><span class="tag comp">CIS Azure Foundations Benchmark</span><span class="tag comp">NIST 800-53</span></td>
+              <td>Review the policy change. Ensure critical policies are protected.</td>
+            </tr>
+            <tr class="sev-CRITICAL">
+              <td>15</td><td>CDR-AZ-DE-001</td>
+              <td><span class="sev" style="background:#ff4757">CRITICAL</span></td>
+              <td><span class="cloud" style="background:#0078d4">AZURE</span></td>
+              <td>Defense Evasion</td><td>Conditional Access policy disabled or deleted</td>
+              <td><code>2026-03-12T10:21:00Z</code></td><td><code>Delete conditional access policy</code></td>
+              <td><code>admin@contoso.com</code></td><td><code>203.0.113.100</code></td>
+              <td>US</td><td><span class="tag mitre">T1562.001</span></td><td><span class="tag comp">CIS Azure Foundations Benchmark</span><span class="tag comp">NIST 800-53</span></td>
+              <td>Review the policy change. Ensure critical policies are protected.</td>
+            </tr>
+            <tr class="sev-CRITICAL">
+              <td>16</td><td>CDR-AZ-DE-003</td>
+              <td><span class="sev" style="background:#ff4757">CRITICAL</span></td>
+              <td><span class="cloud" style="background:#0078d4">AZURE</span></td>
+              <td>Defense Evasion</td><td>Security Center/Defender setting disabled</td>
+              <td><code>2026-03-12T10:23:00Z</code></td><td><code>Update security policy</code></td>
+              <td><code>admin@contoso.com</code></td><td><code>203.0.113.100</code></td>
+              <td>US</td><td><span class="tag mitre">T1562.001</span></td><td><span class="tag comp">CIS Azure Foundations Benchmark</span><span class="tag comp">NIST 800-53</span></td>
+              <td>Re-enable Defender settings. Investigate the actor.</td>
+            </tr>
+            <tr class="sev-CRITICAL">
+              <td>17</td><td>CDR-AZ-NET-001</td>
+              <td><span class="sev" style="background:#ff4757">CRITICAL</span></td>
+              <td><span class="cloud" style="background:#0078d4">AZURE</span></td>
+              <td>Network</td><td>NSG rule allowing any source created</td>
+              <td><code>2026-03-12T10:25:00Z</code></td><td><code>Create or Update Security Rule</code></td>
+              <td><code>admin@contoso.com</code></td><td><code>203.0.113.100</code></td>
+              <td>eastus</td><td><span class="tag mitre">T1190</span></td><td><span class="tag comp">CIS Azure Foundations Benchmark</span><span class="tag comp">NIST 800-53</span><span class="tag comp">PCI-DSS v4.0</span></td>
+              <td>Restrict NSG rules to specific source IPs/ranges.</td>
+            </tr>
+            <tr class="sev-CRITICAL">
+              <td>18</td><td>CDR-AZ-IM-002</td>
+              <td><span class="sev" style="background:#ff4757">CRITICAL</span></td>
+              <td><span class="cloud" style="background:#0078d4">AZURE</span></td>
+              <td>Impact</td><td>Key Vault key or secret deleted</td>
+              <td><code>2026-03-12T10:31:00Z</code></td><td><code>SecretDelete</code></td>
+              <td><code>admin@contoso.com</code></td><td><code>203.0.113.100</code></td>
+              <td>eastus</td><td><span class="tag mitre">T1485</span></td><td><span class="tag comp">NIST 800-53</span><span class="tag comp">PCI-DSS v4.0</span></td>
+              <td>Enable soft delete and purge protection on Key Vaults.</td>
+            </tr>
+            <tr class="sev-CRITICAL">
+              <td>19</td><td>CDR-GCP-PR-001</td>
+              <td><span class="sev" style="background:#ff4757">CRITICAL</span></td>
+              <td><span class="cloud" style="background:#4285f4">GCP</span></td>
+              <td>Privilege Escalation</td><td>IAM policy binding with Owner/Editor role</td>
+              <td><code>2026-03-12T11:05:00Z</code></td><td><code>SetIamPolicy</code></td>
+              <td><code>attacker@evil.com</code></td><td><code>203.0.113.200</code></td>
+              <td>global</td><td><span class="tag mitre">T1098.003</span></td><td><span class="tag comp">CIS GCP Foundations Benchmark</span><span class="tag comp">NIST 800-53</span></td>
+              <td>Use predefined or custom roles with least privilege.</td>
+            </tr>
+            <tr class="sev-CRITICAL">
+              <td>20</td><td>CDR-GCP-DE-001</td>
+              <td><span class="sev" style="background:#ff4757">CRITICAL</span></td>
+              <td><span class="cloud" style="background:#4285f4">GCP</span></td>
+              <td>Defense Evasion</td><td>Audit log sink deleted</td>
+              <td><code>2026-03-12T11:10:00Z</code></td><td><code>google.logging.v2.ConfigServiceV2.DeleteSink</code></td>
+              <td><code>attacker@evil.com</code></td><td><code>203.0.113.200</code></td>
+              <td>global</td><td><span class="tag mitre">T1562.008</span></td><td><span class="tag comp">CIS GCP Foundations Benchmark</span><span class="tag comp">NIST 800-53</span></td>
+              <td>Recreate the logging sink. Investigate the actor.</td>
+            </tr>
+            <tr class="sev-CRITICAL">
+              <td>21</td><td>CDR-GCP-EX-001</td>
+              <td><span class="sev" style="background:#ff4757">CRITICAL</span></td>
+              <td><span class="cloud" style="background:#4285f4">GCP</span></td>
+              <td>Exfiltration</td><td>GCS bucket made public</td>
+              <td><code>2026-03-12T11:15:00Z</code></td><td><code>storage.setIamPermissions</code></td>
+              <td><code>attacker@evil.com</code></td><td><code>203.0.113.200</code></td>
+              <td>us-central1</td><td><span class="tag mitre">T1530</span></td><td><span class="tag comp">CIS GCP Foundations Benchmark</span><span class="tag comp">NIST 800-53</span><span class="tag comp">PCI-DSS v4.0</span></td>
+              <td>Remove allUsers/allAuthenticatedUsers. Enable Uniform Bucket-Level Access.</td>
+            </tr>
+            <tr class="sev-CRITICAL">
+              <td>22</td><td>CDR-GCP-NET-001</td>
+              <td><span class="sev" style="background:#ff4757">CRITICAL</span></td>
+              <td><span class="cloud" style="background:#4285f4">GCP</span></td>
+              <td>Network</td><td>Firewall rule allowing 0.0.0.0/0 created</td>
+              <td><code>2026-03-12T11:20:00Z</code></td><td><code>v1.compute.firewalls.insert</code></td>
+              <td><code>attacker@evil.com</code></td><td><code>203.0.113.200</code></td>
+              <td>global</td><td><span class="tag mitre">T1190</span></td><td><span class="tag comp">CIS GCP Foundations Benchmark</span><span class="tag comp">NIST 800-53</span><span class="tag comp">PCI-DSS v4.0</span></td>
+              <td>Restrict source ranges. Use Identity-Aware Proxy for access.</td>
+            </tr>
+            <tr class="sev-CRITICAL">
+              <td>23</td><td>CDR-GCP-IM-002</td>
+              <td><span class="sev" style="background:#ff4757">CRITICAL</span></td>
+              <td><span class="cloud" style="background:#4285f4">GCP</span></td>
+              <td>Impact</td><td>KMS key version destroyed</td>
+              <td><code>2026-03-12T11:30:00Z</code></td><td><code>DestroyCryptoKeyVersion</code></td>
+              <td><code>attacker@evil.com</code></td><td><code>203.0.113.200</code></td>
+              <td>global</td><td><span class="tag mitre">T1485</span></td><td><span class="tag comp">NIST 800-53</span><span class="tag comp">PCI-DSS v4.0</span></td>
+              <td>Review key usage. Enable key version destroy delay.</td>
+            </tr>
+            <tr class="sev-HIGH">
+              <td>24</td><td>CDR-AWS-IA-002</td>
+              <td><span class="sev" style="background:#ff6b81">HIGH</span></td>
+              <td><span class="cloud" style="background:#ff9900">AWS</span></td>
+              <td>Initial Access</td><td>Console login without MFA</td>
+              <td><code>2026-03-12T08:15:00Z</code></td><td><code>ConsoleLogin</code></td>
+              <td><code>arn:aws:iam::123456789012:root</code></td><td><code>203.0.113.50</code></td>
+              <td>us-east-1</td><td><span class="tag mitre">T1078.004</span></td><td><span class="tag comp">CIS AWS Foundations Benchmark</span><span class="tag comp">NIST 800-53</span><span class="tag comp">PCI-DSS v4.0</span></td>
+              <td>Enforce MFA for all IAM users with console access.</td>
+            </tr>
+            <tr class="sev-HIGH">
+              <td>25</td><td>CDR-AWS-IA-002</td>
+              <td><span class="sev" style="background:#ff6b81">HIGH</span></td>
+              <td><span class="cloud" style="background:#ff9900">AWS</span></td>
+              <td>Initial Access</td><td>Console login without MFA</td>
+              <td><code>2026-03-12T08:20:00Z</code></td><td><code>ConsoleLogin</code></td>
+              <td><code>arn:aws:iam::123456789012:user/jsmith</code></td><td><code>198.51.100.22</code></td>
+              <td>us-east-1</td><td><span class="tag mitre">T1078.004</span></td><td><span class="tag comp">CIS AWS Foundations Benchmark</span><span class="tag comp">NIST 800-53</span><span class="tag comp">PCI-DSS v4.0</span></td>
+              <td>Enforce MFA for all IAM users with console access.</td>
+            </tr>
+            <tr class="sev-HIGH">
+              <td>26</td><td>CDR-AWS-PE-001</td>
+              <td><span class="sev" style="background:#ff6b81">HIGH</span></td>
+              <td><span class="cloud" style="background:#ff9900">AWS</span></td>
+              <td>Persistence</td><td>IAM user created</td>
+              <td><code>2026-03-12T08:30:00Z</code></td><td><code>CreateUser</code></td>
+              <td><code>arn:aws:iam::123456789012:user/attacker</code></td><td><code>203.0.113.50</code></td>
+              <td>us-east-1</td><td><span class="tag mitre">T1136.003</span></td><td><span class="tag comp">CIS AWS Foundations Benchmark</span><span class="tag comp">SOC 2 Type II</span></td>
+              <td>Verify the user creation was authorised. Review the user's permissions.</td>
+            </tr>
+            <tr class="sev-HIGH">
+              <td>27</td><td>CDR-AWS-PE-002</td>
+              <td><span class="sev" style="background:#ff6b81">HIGH</span></td>
+              <td><span class="cloud" style="background:#ff9900">AWS</span></td>
+              <td>Persistence</td><td>Access key created</td>
+              <td><code>2026-03-12T08:31:00Z</code></td><td><code>CreateAccessKey</code></td>
+              <td><code>arn:aws:iam::123456789012:user/attacker</code></td><td><code>203.0.113.50</code></td>
+              <td>us-east-1</td><td><span class="tag mitre">T1098.001</span></td><td><span class="tag comp">CIS AWS Foundations Benchmark</span><span class="tag comp">NIST 800-53</span></td>
+              <td>Verify key creation was authorised. Rotate keys regularly.</td>
+            </tr>
+            <tr class="sev-HIGH">
+              <td>28</td><td>CDR-AWS-PE-003</td>
+              <td><span class="sev" style="background:#ff6b81">HIGH</span></td>
+              <td><span class="cloud" style="background:#ff9900">AWS</span></td>
+              <td>Persistence</td><td>Login profile created (console access added)</td>
+              <td><code>2026-03-12T08:32:00Z</code></td><td><code>CreateLoginProfile</code></td>
+              <td><code>arn:aws:iam::123456789012:user/attacker</code></td><td><code>203.0.113.50</code></td>
+              <td>us-east-1</td><td><span class="tag mitre">T1098.001</span></td><td><span class="tag comp">CIS AWS Foundations Benchmark</span></td>
+              <td>Verify this was intentional. Ensure MFA is required.</td>
+            </tr>
+            <tr class="sev-HIGH">
+              <td>29</td><td>CDR-AWS-PR-003</td>
+              <td><span class="sev" style="background:#ff6b81">HIGH</span></td>
+              <td><span class="cloud" style="background:#ff9900">AWS</span></td>
+              <td>Privilege Escalation</td><td>Inline policy added to user</td>
+              <td><code>2026-03-12T08:34:00Z</code></td><td><code>PutUserPolicy</code></td>
+              <td><code>arn:aws:iam::123456789012:user/attacker</code></td><td><code>203.0.113.50</code></td>
+              <td>us-east-1</td><td><span class="tag mitre">T1098.003</span></td><td><span class="tag comp">CIS AWS Foundations Benchmark</span></td>
+              <td>Use managed policies attached to groups or roles instead.</td>
+            </tr>
+            <tr class="sev-HIGH">
+              <td>30</td><td>CDR-AWS-DE-003</td>
+              <td><span class="sev" style="background:#ff6b81">HIGH</span></td>
+              <td><span class="cloud" style="background:#ff9900">AWS</span></td>
+              <td>Defense Evasion</td><td>CloudTrail event selectors modified</td>
+              <td><code>2026-03-12T08:42:00Z</code></td><td><code>PutEventSelectors</code></td>
+              <td><code>arn:aws:iam::123456789012:user/attacker</code></td><td><code>203.0.113.50</code></td>
+              <td>us-east-1</td><td><span class="tag mitre">T1562.008</span></td><td><span class="tag comp">CIS AWS Foundations Benchmark</span></td>
+              <td>Verify logging configuration includes all management and data events.</td>
+            </tr>
+            <tr class="sev-HIGH">
+              <td>31</td><td>CDR-AWS-DE-005</td>
+              <td><span class="sev" style="background:#ff6b81">HIGH</span></td>
+              <td><span class="cloud" style="background:#ff9900">AWS</span></td>
+              <td>Defense Evasion</td><td>S3 bucket logging disabled</td>
+              <td><code>2026-03-12T08:44:00Z</code></td><td><code>PutBucketLogging</code></td>
+              <td><code>arn:aws:iam::123456789012:user/attacker</code></td><td><code>203.0.113.50</code></td>
+              <td>us-east-1</td><td><span class="tag mitre">T1562.008</span></td><td><span class="tag comp">CIS AWS Foundations Benchmark</span><span class="tag comp">SOC 2 Type II</span></td>
+              <td>Ensure server access logging is enabled on all sensitive buckets.</td>
+            </tr>
+            <tr class="sev-HIGH">
+              <td>32</td><td>CDR-AWS-DE-007</td>
+              <td><span class="sev" style="background:#ff6b81">HIGH</span></td>
+              <td><span class="cloud" style="background:#ff9900">AWS</span></td>
+              <td>Defense Evasion</td><td>VPC flow log deleted</td>
+              <td><code>2026-03-12T08:46:00Z</code></td><td><code>DeleteFlowLogs</code></td>
+              <td><code>arn:aws:iam::123456789012:user/attacker</code></td><td><code>203.0.113.50</code></td>
+              <td>us-east-1</td><td><span class="tag mitre">T1562.008</span></td><td><span class="tag comp">CIS AWS Foundations Benchmark</span><span class="tag comp">NIST 800-53</span></td>
+              <td>Recreate flow logs. Investigate who deleted them.</td>
+            </tr>
+            <tr class="sev-HIGH">
+              <td>33</td><td>CDR-AWS-CA-003</td>
+              <td><span class="sev" style="background:#ff6b81">HIGH</span></td>
+              <td><span class="cloud" style="background:#ff9900">AWS</span></td>
+              <td>Credential Access</td><td>Password policy weakened</td>
+              <td><code>2026-03-12T08:50:00Z</code></td><td><code>UpdateAccountPasswordPolicy</code></td>
+              <td><code>arn:aws:iam::123456789012:user/attacker</code></td><td><code>203.0.113.50</code></td>
+              <td>us-east-1</td><td><span class="tag mitre">T1556</span></td><td><span class="tag comp">CIS AWS Foundations Benchmark</span><span class="tag comp">NIST 800-53</span></td>
+              <td>Review password policy. Enforce strong password requirements.</td>
+            </tr>
+            <tr class="sev-HIGH">
+              <td>34</td><td>CDR-AWS-IM-001</td>
+              <td><span class="sev" style="background:#ff6b81">HIGH</span></td>
+              <td><span class="cloud" style="background:#ff9900">AWS</span></td>
+              <td>Impact</td><td>EC2 instances terminated in bulk</td>
+              <td><code>2026-03-12T09:10:00Z</code></td><td><code>TerminateInstances</code></td>
+              <td><code>arn:aws:iam::123456789012:user/attacker</code></td><td><code>203.0.113.50</code></td>
+              <td>us-east-1</td><td><span class="tag mitre">T1578.003</span><span class="tag mitre">T1485</span></td><td><span class="tag comp">SOC 2 Type II</span></td>
+              <td>Verify the termination was authorised. Enable termination protection on critical instances.</td>
+            </tr>
+            <tr class="sev-HIGH">
+              <td>35</td><td>CDR-AWS-IM-003</td>
+              <td><span class="sev" style="background:#ff6b81">HIGH</span></td>
+              <td><span class="cloud" style="background:#ff9900">AWS</span></td>
+              <td>Impact</td><td>S3 bucket deleted</td>
+              <td><code>2026-03-12T09:13:00Z</code></td><td><code>DeleteBucket</code></td>
+              <td><code>arn:aws:iam::123456789012:user/attacker</code></td><td><code>203.0.113.50</code></td>
+              <td>us-east-1</td><td><span class="tag mitre">T1485</span></td><td><span class="tag comp">SOC 2 Type II</span></td>
+              <td>Enable versioning and MFA Delete on critical buckets.</td>
+            </tr>
+            <tr class="sev-HIGH">
+              <td>36</td><td>CDR-AWS-IM-004</td>
+              <td><span class="sev" style="background:#ff6b81">HIGH</span></td>
+              <td><span class="cloud" style="background:#ff9900">AWS</span></td>
+              <td>Impact</td><td>Potential cryptominer — large/GPU instance launched</td>
+              <td><code>2026-03-12T09:14:00Z</code></td><td><code>RunInstances</code></td>
+              <td><code>arn:aws:iam::123456789012:user/attacker</code></td><td><code>203.0.113.50</code></td>
+              <td>us-east-1</td><td><span class="tag mitre">T1496</span></td><td><span class="tag comp">SOC 2 Type II</span></td>
+              <td>Verify the instance type is justified. Set up billing alerts.</td>
+            </tr>
+            <tr class="sev-HIGH">
+              <td>37</td><td>CDR-AZ-IA-001</td>
+              <td><span class="sev" style="background:#ff6b81">HIGH</span></td>
+              <td><span class="cloud" style="background:#0078d4">AZURE</span></td>
+              <td>Initial Access</td><td>Sign-in from unfamiliar location</td>
+              <td><code>2026-03-12T10:00:00Z</code></td><td><code>Sign-in activity</code></td>
+              <td><code>attacker@evil.com</code></td><td><code>203.0.113.100</code></td>
+              <td>RU</td><td><span class="tag mitre">T1078.004</span></td><td><span class="tag comp">CIS Azure Foundations Benchmark</span><span class="tag comp">NIST 800-53</span></td>
+              <td>Verify with the user. Enable Conditional Access with location-based policies.</td>
+            </tr>
+            <tr class="sev-HIGH">
+              <td>38</td><td>CDR-AZ-IA-003</td>
+              <td><span class="sev" style="background:#ff6b81">HIGH</span></td>
+              <td><span class="cloud" style="background:#0078d4">AZURE</span></td>
+              <td>Initial Access</td><td>Sign-in without MFA</td>
+              <td><code>2026-03-12T10:00:00Z</code></td><td><code>Sign-in activity</code></td>
+              <td><code>attacker@evil.com</code></td><td><code>203.0.113.100</code></td>
+              <td>RU</td><td><span class="tag mitre">T1078.004</span></td><td><span class="tag comp">CIS Azure Foundations Benchmark</span><span class="tag comp">NIST 800-53</span><span class="tag comp">PCI-DSS v4.0</span></td>
+              <td>Enforce MFA via Conditional Access for all users.</td>
+            </tr>
+            <tr class="sev-HIGH">
+              <td>39</td><td>CDR-AZ-IA-003</td>
+              <td><span class="sev" style="background:#ff6b81">HIGH</span></td>
+              <td><span class="cloud" style="background:#0078d4">AZURE</span></td>
+              <td>Initial Access</td><td>Sign-in without MFA</td>
+              <td><code>2026-03-12T10:02:00Z</code></td><td><code>Sign-in activity</code></td>
+              <td><code>user@contoso.com</code></td><td><code>10.0.1.50</code></td>
+              <td>US</td><td><span class="tag mitre">T1078.004</span></td><td><span class="tag comp">CIS Azure Foundations Benchmark</span><span class="tag comp">NIST 800-53</span><span class="tag comp">PCI-DSS v4.0</span></td>
+              <td>Enforce MFA via Conditional Access for all users.</td>
+            </tr>
+            <tr class="sev-HIGH">
+              <td>40</td><td>CDR-AZ-PE-001</td>
+              <td><span class="sev" style="background:#ff6b81">HIGH</span></td>
+              <td><span class="cloud" style="background:#0078d4">AZURE</span></td>
+              <td>Persistence</td><td>New user or guest account created</td>
+              <td><code>2026-03-12T10:10:00Z</code></td><td><code>Add user</code></td>
+              <td><code>admin@contoso.com</code></td><td><code>203.0.113.100</code></td>
+              <td>US</td><td><span class="tag mitre">T1136.003</span></td><td><span class="tag comp">CIS Azure Foundations Benchmark</span><span class="tag comp">SOC 2 Type II</span></td>
+              <td>Verify account creation was authorised. Review assigned roles.</td>
+            </tr>
+            <tr class="sev-HIGH">
+              <td>41</td><td>CDR-AZ-PE-001</td>
+              <td><span class="sev" style="background:#ff6b81">HIGH</span></td>
+              <td><span class="cloud" style="background:#0078d4">AZURE</span></td>
+              <td>Persistence</td><td>New user or guest account created</td>
+              <td><code>2026-03-12T10:11:00Z</code></td><td><code>Invite external user</code></td>
+              <td><code>admin@contoso.com</code></td><td><code>203.0.113.100</code></td>
+              <td>US</td><td><span class="tag mitre">T1136.003</span></td><td><span class="tag comp">CIS Azure Foundations Benchmark</span><span class="tag comp">SOC 2 Type II</span></td>
+              <td>Verify account creation was authorised. Review assigned roles.</td>
+            </tr>
+            <tr class="sev-HIGH">
+              <td>42</td><td>CDR-AZ-PE-002</td>
+              <td><span class="sev" style="background:#ff6b81">HIGH</span></td>
+              <td><span class="cloud" style="background:#0078d4">AZURE</span></td>
+              <td>Persistence</td><td>Application credentials added</td>
+              <td><code>2026-03-12T10:12:00Z</code></td><td><code>Add service principal credentials</code></td>
+              <td><code>admin@contoso.com</code></td><td><code>203.0.113.100</code></td>
+              <td>US</td><td><span class="tag mitre">T1098.001</span></td><td><span class="tag comp">CIS Azure Foundations Benchmark</span></td>
+              <td>Verify the credential addition. Monitor for unused app credentials.</td>
+            </tr>
+            <tr class="sev-HIGH">
+              <td>43</td><td>CDR-AZ-PE-003</td>
+              <td><span class="sev" style="background:#ff6b81">HIGH</span></td>
+              <td><span class="cloud" style="background:#0078d4">AZURE</span></td>
+              <td>Persistence</td><td>OAuth2 consent grant (admin consent)</td>
+              <td><code>2026-03-12T10:13:00Z</code></td><td><code>Consent to application</code></td>
+              <td><code>admin@contoso.com</code></td><td><code>203.0.113.100</code></td>
+              <td>US</td><td><span class="tag mitre">T1528</span></td><td><span class="tag comp">CIS Azure Foundations Benchmark</span><span class="tag comp">SOC 2 Type II</span></td>
+              <td>Review the application permissions. Use admin consent workflow.</td>
+            </tr>
+            <tr class="sev-HIGH">
+              <td>44</td><td>CDR-AZ-PR-002</td>
+              <td><span class="sev" style="background:#ff6b81">HIGH</span></td>
+              <td><span class="cloud" style="background:#0078d4">AZURE</span></td>
+              <td>Privilege Escalation</td><td>Privileged role assigned</td>
+              <td><code>2026-03-12T10:15:00Z</code></td><td><code>Add member to role</code></td>
+              <td><code>admin@contoso.com</code></td><td><code>203.0.113.100</code></td>
+              <td>US</td><td><span class="tag mitre">T1098.003</span></td><td><span class="tag comp">CIS Azure Foundations Benchmark</span><span class="tag comp">NIST 800-53</span></td>
+              <td>Verify the role assignment. Use PIM for just-in-time access.</td>
+            </tr>
+            <tr class="sev-HIGH">
+              <td>45</td><td>CDR-AZ-PR-002</td>
+              <td><span class="sev" style="background:#ff6b81">HIGH</span></td>
+              <td><span class="cloud" style="background:#0078d4">AZURE</span></td>
+              <td>Privilege Escalation</td><td>Privileged role assigned</td>
+              <td><code>2026-03-12T10:16:00Z</code></td><td><code>Add eligible member to role</code></td>
+              <td><code>admin@contoso.com</code></td><td><code>203.0.113.100</code></td>
+              <td>US</td><td><span class="tag mitre">T1098.003</span></td><td><span class="tag comp">CIS Azure Foundations Benchmark</span><span class="tag comp">NIST 800-53</span></td>
+              <td>Verify the role assignment. Use PIM for just-in-time access.</td>
+            </tr>
+            <tr class="sev-HIGH">
+              <td>46</td><td>CDR-AZ-DE-002</td>
+              <td><span class="sev" style="background:#ff6b81">HIGH</span></td>
+              <td><span class="cloud" style="background:#0078d4">AZURE</span></td>
+              <td>Defense Evasion</td><td>Diagnostic setting deleted</td>
+              <td><code>2026-03-12T10:22:00Z</code></td><td><code>Delete diagnostic setting</code></td>
+              <td><code>admin@contoso.com</code></td><td><code>203.0.113.100</code></td>
+              <td>US</td><td><span class="tag mitre">T1562.008</span></td><td><span class="tag comp">CIS Azure Foundations Benchmark</span><span class="tag comp">NIST 800-53</span></td>
+              <td>Re-enable diagnostic settings. Investigate who deleted them.</td>
+            </tr>
+            <tr class="sev-HIGH">
+              <td>47</td><td>CDR-AZ-IM-001</td>
+              <td><span class="sev" style="background:#ff6b81">HIGH</span></td>
+              <td><span class="cloud" style="background:#0078d4">AZURE</span></td>
+              <td>Impact</td><td>Resource group or resource deleted</td>
+              <td><code>2026-03-12T10:30:00Z</code></td><td><code>Delete resource group</code></td>
+              <td><code>admin@contoso.com</code></td><td><code>203.0.113.100</code></td>
+              <td>eastus</td><td><span class="tag mitre">T1485</span></td><td><span class="tag comp">SOC 2 Type II</span></td>
+              <td>Enable resource locks on critical resources.</td>
+            </tr>
+            <tr class="sev-HIGH">
+              <td>48</td><td>CDR-GCP-PE-001</td>
+              <td><span class="sev" style="background:#ff6b81">HIGH</span></td>
+              <td><span class="cloud" style="background:#4285f4">GCP</span></td>
+              <td>Persistence</td><td>Service account created</td>
+              <td><code>2026-03-12T11:00:00Z</code></td><td><code>google.iam.admin.v1.CreateServiceAccount</code></td>
+              <td><code>attacker@evil.com</code></td><td><code>203.0.113.200</code></td>
+              <td>global</td><td><span class="tag mitre">T1136.003</span></td><td><span class="tag comp">CIS GCP Foundations Benchmark</span><span class="tag comp">SOC 2 Type II</span></td>
+              <td>Verify service account creation. Apply least privilege roles.</td>
+            </tr>
+            <tr class="sev-HIGH">
+              <td>49</td><td>CDR-GCP-PE-002</td>
+              <td><span class="sev" style="background:#ff6b81">HIGH</span></td>
+              <td><span class="cloud" style="background:#4285f4">GCP</span></td>
+              <td>Persistence</td><td>Service account key created</td>
+              <td><code>2026-03-12T11:01:00Z</code></td><td><code>google.iam.admin.v1.CreateServiceAccountKey</code></td>
+              <td><code>attacker@evil.com</code></td><td><code>203.0.113.200</code></td>
+              <td>global</td><td><span class="tag mitre">T1098.001</span></td><td><span class="tag comp">CIS GCP Foundations Benchmark</span><span class="tag comp">NIST 800-53</span></td>
+              <td>Avoid user-managed keys. Use Workload Identity Federation.</td>
+            </tr>
+            <tr class="sev-HIGH">
+              <td>50</td><td>CDR-GCP-DE-002</td>
+              <td><span class="sev" style="background:#ff6b81">HIGH</span></td>
+              <td><span class="cloud" style="background:#4285f4">GCP</span></td>
+              <td>Defense Evasion</td><td>Firewall rule deleted or modified</td>
+              <td><code>2026-03-12T11:11:00Z</code></td><td><code>v1.compute.firewalls.delete</code></td>
+              <td><code>attacker@evil.com</code></td><td><code>203.0.113.200</code></td>
+              <td>global</td><td><span class="tag mitre">T1562.001</span></td><td><span class="tag comp">CIS GCP Foundations Benchmark</span><span class="tag comp">NIST 800-53</span></td>
+              <td>Verify firewall changes. Use Organisation Policies for guardrails.</td>
+            </tr>
+            <tr class="sev-HIGH">
+              <td>51</td><td>CDR-GCP-IM-001</td>
+              <td><span class="sev" style="background:#ff6b81">HIGH</span></td>
+              <td><span class="cloud" style="background:#4285f4">GCP</span></td>
+              <td>Impact</td><td>Project or resource deleted</td>
+              <td><code>2026-03-12T11:25:00Z</code></td><td><code>v1.compute.instances.delete</code></td>
+              <td><code>attacker@evil.com</code></td><td><code>203.0.113.200</code></td>
+              <td>us-central1-a</td><td><span class="tag mitre">T1485</span></td><td><span class="tag comp">SOC 2 Type II</span></td>
+              <td>Enable liens on critical projects. Verify deletion was authorised.</td>
+            </tr>
+            <tr class="sev-MEDIUM">
+              <td>52</td><td>CDR-AWS-IA-003</td>
+              <td><span class="sev" style="background:#ffa502">MEDIUM</span></td>
+              <td><span class="cloud" style="background:#ff9900">AWS</span></td>
+              <td>Initial Access</td><td>Console login failure — possible brute force</td>
+              <td><code>2026-03-12T08:22:00Z</code></td><td><code>ConsoleLogin</code></td>
+              <td><code>arn:aws:iam::123456789012:user/attacker</code></td><td><code>192.0.2.99</code></td>
+              <td>us-east-1</td><td><span class="tag mitre">T1110.001</span></td><td><span class="tag comp">NIST 800-53</span></td>
+              <td>Investigate source IP. Enable account lockout and MFA.</td>
+            </tr>
+            <tr class="sev-MEDIUM">
+              <td>53</td><td>CDR-AWS-PR-004</td>
+              <td><span class="sev" style="background:#ffa502">MEDIUM</span></td>
+              <td><span class="cloud" style="background:#ff9900">AWS</span></td>
+              <td>Privilege Escalation</td><td>STS AssumeRole to cross-account role</td>
+              <td><code>2026-03-12T08:36:00Z</code></td><td><code>AssumeRole</code></td>
+              <td><code>arn:aws:iam::123456789012:user/attacker</code></td><td><code>203.0.113.50</code></td>
+              <td>us-east-1</td><td><span class="tag mitre">T1199</span></td><td><span class="tag comp">NIST 800-53</span><span class="tag comp">SOC 2 Type II</span></td>
+              <td>Verify cross-account access is authorised and uses external ID.</td>
+            </tr>
+            <tr class="sev-MEDIUM">
+              <td>54</td><td>CDR-AWS-CA-001</td>
+              <td><span class="sev" style="background:#ffa502">MEDIUM</span></td>
+              <td><span class="cloud" style="background:#ff9900">AWS</span></td>
+              <td>Credential Access</td><td>Secrets Manager secret accessed</td>
+              <td><code>2026-03-12T08:48:00Z</code></td><td><code>GetSecretValue</code></td>
+              <td><code>arn:aws:iam::123456789012:user/attacker</code></td><td><code>203.0.113.50</code></td>
+              <td>us-east-1</td><td><span class="tag mitre">T1552</span></td><td><span class="tag comp">NIST 800-53</span><span class="tag comp">PCI-DSS v4.0</span></td>
+              <td>Verify the accessor is authorised. Enable secret rotation.</td>
+            </tr>
+            <tr class="sev-MEDIUM">
+              <td>55</td><td>CDR-AWS-CA-002</td>
+              <td><span class="sev" style="background:#ffa502">MEDIUM</span></td>
+              <td><span class="cloud" style="background:#ff9900">AWS</span></td>
+              <td>Credential Access</td><td>SSM Parameter Store sensitive parameter accessed</td>
+              <td><code>2026-03-12T08:49:00Z</code></td><td><code>GetParameter</code></td>
+              <td><code>arn:aws:iam::123456789012:user/attacker</code></td><td><code>203.0.113.50</code></td>
+              <td>us-east-1</td><td><span class="tag mitre">T1552</span></td><td><span class="tag comp">NIST 800-53</span></td>
+              <td>Use SecureString type and restrict access via IAM policies.</td>
+            </tr>
+            <tr class="sev-MEDIUM">
+              <td>56</td><td>CDR-AWS-DI-002</td>
+              <td><span class="sev" style="background:#ffa502">MEDIUM</span></td>
+              <td><span class="cloud" style="background:#ff9900">AWS</span></td>
+              <td>Discovery</td><td>S3 bucket enumeration</td>
+              <td><code>2026-03-12T08:52:00Z</code></td><td><code>ListBuckets</code></td>
+              <td><code>arn:aws:iam::123456789012:user/attacker</code></td><td><code>203.0.113.50</code></td>
+              <td>us-east-1</td><td><span class="tag mitre">T1619</span></td><td></td>
+              <td>Review if the caller has legitimate need to list/inspect bucket configurations.</td>
+            </tr>
+            <tr class="sev-MEDIUM">
+              <td>57</td><td>CDR-AWS-DI-002</td>
+              <td><span class="sev" style="background:#ffa502">MEDIUM</span></td>
+              <td><span class="cloud" style="background:#ff9900">AWS</span></td>
+              <td>Discovery</td><td>S3 bucket enumeration</td>
+              <td><code>2026-03-12T08:54:00Z</code></td><td><code>GetBucketAcl</code></td>
+              <td><code>arn:aws:iam::123456789012:user/attacker</code></td><td><code>203.0.113.50</code></td>
+              <td>us-east-1</td><td><span class="tag mitre">T1619</span></td><td></td>
+              <td>Review if the caller has legitimate need to list/inspect bucket configurations.</td>
+            </tr>
+            <tr class="sev-MEDIUM">
+              <td>58</td><td>CDR-AWS-NET-002</td>
+              <td><span class="sev" style="background:#ffa502">MEDIUM</span></td>
+              <td><span class="cloud" style="background:#ff9900">AWS</span></td>
+              <td>Network</td><td>Security group rule deleted</td>
+              <td><code>2026-03-12T09:06:00Z</code></td><td><code>RevokeSecurityGroupIngress</code></td>
+              <td><code>arn:aws:iam::123456789012:user/attacker</code></td><td><code>203.0.113.50</code></td>
+              <td>us-east-1</td><td><span class="tag mitre">T1562.001</span></td><td><span class="tag comp">NIST 800-53</span></td>
+              <td>Verify the rule removal was intentional and does not weaken security posture.</td>
+            </tr>
+            <tr class="sev-MEDIUM">
+              <td>59</td><td>CDR-AWS-IA-004</td>
+              <td><span class="sev" style="background:#ffa502">MEDIUM</span></td>
+              <td><span class="cloud" style="background:#ff9900">AWS</span></td>
+              <td>Initial Access</td><td>API call from unusual region</td>
+              <td><code>2026-03-12T09:07:00Z</code></td><td><code>CreateVpc</code></td>
+              <td><code>arn:aws:iam::123456789012:user/attacker</code></td><td><code>203.0.113.50</code></td>
+              <td>af-south-1</td><td><span class="tag mitre">T1535</span></td><td><span class="tag comp">CIS AWS Foundations Benchmark</span></td>
+              <td>Investigate if activity is legitimate. Use SCPs to restrict unused regions.</td>
+            </tr>
+            <tr class="sev-MEDIUM">
+              <td>60</td><td>CDR-AWS-NET-003</td>
+              <td><span class="sev" style="background:#ffa502">MEDIUM</span></td>
+              <td><span class="cloud" style="background:#ff9900">AWS</span></td>
+              <td>Network</td><td>VPC or subnet modified</td>
+              <td><code>2026-03-12T09:07:00Z</code></td><td><code>CreateVpc</code></td>
+              <td><code>arn:aws:iam::123456789012:user/attacker</code></td><td><code>203.0.113.50</code></td>
+              <td>af-south-1</td><td><span class="tag mitre">T1578</span></td><td><span class="tag comp">NIST 800-53</span></td>
+              <td>Verify network changes are authorised and follow architecture standards.</td>
+            </tr>
+            <tr class="sev-MEDIUM">
+              <td>61</td><td>CDR-AWS-PE-004</td>
+              <td><span class="sev" style="background:#ffa502">MEDIUM</span></td>
+              <td><span class="cloud" style="background:#ff9900">AWS</span></td>
+              <td>Persistence</td><td>Lambda function created or updated</td>
+              <td><code>2026-03-12T09:16:00Z</code></td><td><code>CreateFunction20150331</code></td>
+              <td><code>arn:aws:iam::123456789012:user/attacker</code></td><td><code>203.0.113.50</code></td>
+              <td>us-east-1</td><td><span class="tag mitre">T1525</span></td><td><span class="tag comp">SOC 2 Type II</span></td>
+              <td>Review the function code and IAM role for excessive permissions.</td>
+            </tr>
+            <tr class="sev-MEDIUM">
+              <td>62</td><td>CDR-AWS-PE-005</td>
+              <td><span class="sev" style="background:#ffa502">MEDIUM</span></td>
+              <td><span class="cloud" style="background:#ff9900">AWS</span></td>
+              <td>Persistence</td><td>EC2 key pair created or imported</td>
+              <td><code>2026-03-12T09:17:00Z</code></td><td><code>CreateKeyPair</code></td>
+              <td><code>arn:aws:iam::123456789012:user/attacker</code></td><td><code>203.0.113.50</code></td>
+              <td>us-east-1</td><td><span class="tag mitre">T1098.001</span></td><td><span class="tag comp">NIST 800-53</span></td>
+              <td>Verify key pair creation. Use Session Manager instead of SSH keys.</td>
+            </tr>
+            <tr class="sev-MEDIUM">
+              <td>63</td><td>CDR-AZ-IA-002</td>
+              <td><span class="sev" style="background:#ffa502">MEDIUM</span></td>
+              <td><span class="cloud" style="background:#0078d4">AZURE</span></td>
+              <td>Initial Access</td><td>Multiple failed sign-in attempts</td>
+              <td><code>2026-03-12T10:01:00Z</code></td><td><code>Sign-in activity</code></td>
+              <td><code>bruteforcer@evil.com</code></td><td><code>198.51.100.44</code></td>
+              <td>CN</td><td><span class="tag mitre">T1110</span></td><td><span class="tag comp">CIS Azure Foundations Benchmark</span><span class="tag comp">NIST 800-53</span></td>
+              <td>Enable smart lockout. Enforce MFA and Conditional Access.</td>
+            </tr>
+            <tr class="sev-MEDIUM">
+              <td>64</td><td>CDR-GCP-PR-002</td>
+              <td><span class="sev" style="background:#ffa502">MEDIUM</span></td>
+              <td><span class="cloud" style="background:#4285f4">GCP</span></td>
+              <td>Privilege Escalation</td><td>Custom IAM role created</td>
+              <td><code>2026-03-12T11:06:00Z</code></td><td><code>google.iam.admin.v1.CreateRole</code></td>
+              <td><code>attacker@evil.com</code></td><td><code>203.0.113.200</code></td>
+              <td>global</td><td><span class="tag mitre">T1098.003</span></td><td><span class="tag comp">CIS GCP Foundations Benchmark</span></td>
+              <td>Review custom role permissions for overly broad access.</td>
+            </tr>
+            <tr class="sev-LOW">
+              <td>65</td><td>CDR-AWS-DI-001</td>
+              <td><span class="sev" style="background:#1e90ff">LOW</span></td>
+              <td><span class="cloud" style="background:#ff9900">AWS</span></td>
+              <td>Discovery</td><td>Reconnaissance API calls detected</td>
+              <td><code>2026-03-12T08:52:00Z</code></td><td><code>ListBuckets</code></td>
+              <td><code>arn:aws:iam::123456789012:user/attacker</code></td><td><code>203.0.113.50</code></td>
+              <td>us-east-1</td><td><span class="tag mitre">T1580</span><span class="tag mitre">T1526</span></td><td></td>
+              <td>Verify if the caller has a legitimate need for this discovery.</td>
+            </tr>
+            <tr class="sev-LOW">
+              <td>66</td><td>CDR-AWS-DI-001</td>
+              <td><span class="sev" style="background:#1e90ff">LOW</span></td>
+              <td><span class="cloud" style="background:#ff9900">AWS</span></td>
+              <td>Discovery</td><td>Reconnaissance API calls detected</td>
+              <td><code>2026-03-12T08:53:00Z</code></td><td><code>DescribeInstances</code></td>
+              <td><code>arn:aws:iam::123456789012:user/attacker</code></td><td><code>203.0.113.50</code></td>
+              <td>us-east-1</td><td><span class="tag mitre">T1580</span><span class="tag mitre">T1526</span></td><td></td>
+              <td>Verify if the caller has a legitimate need for this discovery.</td>
+            </tr></tbody></table></div>
+<script>
+function filterSev(){
+  const chk=document.querySelectorAll('.sev-chk');
+  const on=new Set();chk.forEach(c=>{if(c.checked)on.add(c.value)});
+  document.querySelectorAll('tbody tr').forEach(r=>{
+    const s=r.className.replace('sev-','');r.style.display=on.has(s)?'':'none';
+  });
+}
+</script></body></html>
